@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Chat Pro</title>
+<title>AI Chat</title>
 
 <style>
 
@@ -13,60 +13,44 @@ font-family:Cairo;
 background:#0f172a;
 color:white;
 display:flex;
+flex-direction:column;
 height:100vh;
-overflow:hidden;
 }
 
-/* SIDEBAR */
-.sidebar{
-width:260px;
-background:#020617;
+/* LOGIN */
+#loginScreen{
 display:flex;
 flex-direction:column;
-border-left:1px solid #111;
+justify-content:center;
+align-items:center;
+height:100vh;
+gap:10px;
 }
 
-.new-chat{
-padding:15px;
-border-bottom:1px solid #111;
-}
-
-.new-chat button{
-width:100%;
-padding:10px;
-background:#2563eb;
+input{
+padding:12px;
 border:none;
+border-radius:8px;
+width:250px;
+}
+
+button{
+padding:10px 15px;
+border:none;
+background:#2563eb;
 color:white;
 border-radius:8px;
 cursor:pointer;
 }
 
-.chat-list{
-flex:1;
-overflow-y:auto;
-padding:10px;
-}
-
-.chat-item{
-padding:10px;
-background:#1e293b;
-margin-bottom:8px;
-border-radius:8px;
-cursor:pointer;
-}
-
-.chat-item:hover{
-background:#334155;
-}
-
-/* MAIN */
-.main{
-flex:1;
-display:flex;
+/* CHAT */
+#chatApp{
+display:none;
 flex-direction:column;
+height:100vh;
 }
 
-.header{
+header{
 padding:10px;
 background:#020617;
 display:flex;
@@ -76,12 +60,12 @@ justify-content:space-between;
 .chat-box{
 flex:1;
 overflow-y:auto;
-padding:20px;
+padding:15px;
 }
 
 .message{
 margin:10px 0;
-padding:12px;
+padding:10px;
 border-radius:10px;
 max-width:70%;
 }
@@ -95,48 +79,17 @@ margin-left:auto;
 background:#1e293b;
 }
 
-/* INPUT */
 .input-area{
 display:flex;
 padding:10px;
 background:#020617;
 }
 
-input{
-flex:1;
-padding:10px;
-border:none;
-border-radius:8px;
-}
-
-button{
-margin-right:10px;
-padding:10px;
-background:#2563eb;
-border:none;
-color:white;
-border-radius:8px;
-cursor:pointer;
-}
-
-/* LOGIN */
-#login{
-position:absolute;
-width:100%;
-height:100%;
-background:#020617;
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-gap:10px;
-}
-
 footer{
 text-align:center;
-padding:5px;
-font-size:12px;
+padding:8px;
 background:#020617;
+font-size:13px;
 }
 
 </style>
@@ -145,31 +98,19 @@ background:#020617;
 <body>
 
 <!-- LOGIN -->
-<div id="login">
+<div id="loginScreen">
 <h2>تسجيل الدخول</h2>
 <input id="username" placeholder="اكتب اسمك">
 <button onclick="login()">دخول</button>
 </div>
 
-<!-- APP -->
-<div class="sidebar">
-<div class="new-chat">
-<button onclick="newChat()">+ محادثة جديدة</button>
-</div>
+<!-- CHAT -->
+<div id="chatApp">
 
-<div class="chat-list" id="chatList"></div>
-
-<footer>
-Abdulrahman Ahmed Bashir
-</footer>
-</div>
-
-<div class="main">
-
-<div class="header">
-<span id="userName"></span>
+<header>
+<span id="userNameDisplay"></span>
 <button onclick="logout()">خروج</button>
-</div>
+</header>
 
 <div class="chat-box" id="chat"></div>
 
@@ -178,20 +119,25 @@ Abdulrahman Ahmed Bashir
 <input id="input" placeholder="اكتب سؤالك...">
 </div>
 
+<footer>
+برمجة وإنشاء Abdulrahman Ahmed Bashir
+</footer>
+
 </div>
 
 <script>
 
 let API_KEY = localStorage.getItem("apiKey") || "";
-let currentChat = "chat1";
 
 /* LOGIN */
 function login(){
 let name=document.getElementById("username").value;
+
 if(!name) return alert("اكتب اسمك");
 
 localStorage.setItem("user",name);
-start();
+
+startApp();
 }
 
 function logout(){
@@ -200,15 +146,19 @@ location.reload();
 }
 
 /* START */
-function start(){
+function startApp(){
 
 let user=localStorage.getItem("user");
 
 if(!user){
-document.getElementById("login").style.display="flex";
+document.getElementById("loginScreen").style.display="flex";
+document.getElementById("chatApp").style.display="none";
 }else{
-document.getElementById("login").style.display="none";
-document.getElementById("userName").innerText="👤 "+user;
+document.getElementById("loginScreen").style.display="none";
+document.getElementById("chatApp").style.display="flex";
+document.getElementById("userNameDisplay").innerText="👤 "+user;
+
+loadMessages();
 }
 
 if(!API_KEY){
@@ -216,60 +166,29 @@ API_KEY=prompt("حط API KEY:");
 localStorage.setItem("apiKey",API_KEY);
 }
 
-loadChats();
-loadMessages();
 }
 
-/* CHATS */
-function newChat(){
-currentChat="chat"+Date.now();
-saveChats();
-document.getElementById("chat").innerHTML="";
-}
-
-function saveChats(){
-let chats=JSON.parse(localStorage.getItem("chats")||"[]");
-if(!chats.includes(currentChat)){
-chats.push(currentChat);
-localStorage.setItem("chats",JSON.stringify(chats));
-}
-}
-
-function loadChats(){
-let chats=JSON.parse(localStorage.getItem("chats")||"[]");
-let list=document.getElementById("chatList");
-list.innerHTML="";
-
-chats.forEach(c=>{
-let div=document.createElement("div");
-div.className="chat-item";
-div.innerText=c;
-div.onclick=()=>{
-currentChat=c;
-loadMessages();
-};
-list.appendChild(div);
-});
-}
-
-/* MESSAGES */
+/* SAVE & LOAD */
 function saveMessage(text,type){
-let key="messages_"+currentChat;
-let msgs=JSON.parse(localStorage.getItem(key)||"[]");
-msgs.push({text,type});
-localStorage.setItem(key,JSON.stringify(msgs));
+
+let messages=JSON.parse(localStorage.getItem("messages")||"[]");
+
+messages.push({text,type});
+
+localStorage.setItem("messages",JSON.stringify(messages));
 }
 
 function loadMessages(){
-let chat=document.getElementById("chat");
-chat.innerHTML="";
-let msgs=JSON.parse(localStorage.getItem("messages_"+currentChat)||"[]");
 
-msgs.forEach(m=>{
+let messages=JSON.parse(localStorage.getItem("messages")||"[]");
+
+messages.forEach(m=>{
 addMessage(m.text,m.type,false);
 });
+
 }
 
+/* MESSAGE */
 function addMessage(text,type,save=true){
 
 let chat=document.getElementById("chat");
@@ -282,6 +201,7 @@ chat.appendChild(msg);
 chat.scrollTop=chat.scrollHeight;
 
 if(save) saveMessage(text,type);
+
 }
 
 /* SEND */
@@ -289,39 +209,17 @@ async function sendMessage(){
 
 let input=document.getElementById("input");
 let text=input.value.trim();
+
 if(!text) return;
 
 addMessage(text,"user");
+
 input.value="";
 
 let reply=await getAI(text);
 
-typeEffect(reply);
+addMessage(reply,"bot");
 
-}
-
-/* TYPING EFFECT */
-function typeEffect(text){
-
-let chat=document.getElementById("chat");
-
-let msg=document.createElement("div");
-msg.className="message bot";
-chat.appendChild(msg);
-
-let i=0;
-
-function typing(){
-if(i<text.length){
-msg.innerHTML+=text[i];
-i++;
-setTimeout(typing,20);
-}
-chat.scrollTop=chat.scrollHeight;
-}
-
-typing();
-saveMessage(text,"bot");
 }
 
 /* AI */
@@ -351,7 +249,7 @@ return "حصل خطأ";
 }
 
 /* INIT */
-start();
+startApp();
 
 </script>
 
