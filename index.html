@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Abdulrahman Bashir - بينور RGP</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -10,202 +10,143 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            transition: all 0.3s ease;
-        }
-
-        :root {
-            --bg-primary: #f8fafc;
-            --bg-secondary: #ffffff;
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --accent: #3b82f6;
-            --accent-hover: #2563eb;
-            --border: #e2e8f0;
-            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            --code-bg: #1e293b;
-            --code-text: #e2e8f0;
-        }
-
-        body.dark {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --text-primary: #f1f5f9;
-            --text-secondary: #cbd5e1;
-            --border: #334155;
-            --code-bg: #0f172a;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, system-ui, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            margin: 0;
-            padding: 0;
-            direction: rtl;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
             padding: 20px;
         }
 
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
         .header {
-            background: var(--bg-secondary);
-            border-radius: 24px;
+            background: white;
+            border-radius: 20px;
             padding: 20px 30px;
             margin-bottom: 25px;
-            box-shadow: var(--card-shadow);
-            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 15px;
         }
 
         .logo-area h1 {
-            font-size: 1.8rem;
-            background: linear-gradient(135deg, var(--accent), #8b5cf6, #06b6d4);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            margin-bottom: 5px;
+            font-size: 1.8rem;
         }
 
         .logo-area p {
+            color: #666;
             font-size: 0.85rem;
-            color: var(--text-secondary);
+            margin-top: 5px;
         }
 
         .controls {
             display: flex;
-            gap: 12px;
-            align-items: center;
-            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .btn {
             padding: 10px 20px;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.2s;
             font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            transition: all 0.3s;
         }
 
         .btn-primary {
-            background: var(--accent);
+            background: #667eea;
             color: white;
         }
 
         .btn-primary:hover {
-            background: var(--accent-hover);
+            background: #5a67d8;
             transform: translateY(-2px);
         }
 
         .btn-outline {
             background: transparent;
-            border: 2px solid var(--accent);
-            color: var(--accent);
+            border: 2px solid #667eea;
+            color: #667eea;
         }
 
         .btn-outline:hover {
-            background: var(--accent);
+            background: #667eea;
             color: white;
         }
 
+        /* Tabs */
         .tabs {
             display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-            background: var(--bg-secondary);
-            padding: 10px;
-            border-radius: 20px;
-            border: 1px solid var(--border);
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .tab-btn {
             flex: 1;
-            padding: 12px 24px;
-            background: transparent;
+            padding: 15px;
+            background: white;
             border: none;
+            border-radius: 15px;
             cursor: pointer;
             font-size: 1rem;
             font-weight: 600;
-            color: var(--text-secondary);
-            border-radius: 14px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .tab-btn.active {
-            background: var(--accent);
+            background: #667eea;
             color: white;
         }
 
+        /* Cards */
         .card {
-            background: var(--bg-secondary);
-            border-radius: 24px;
-            padding: 30px;
-            margin-bottom: 25px;
-            border: 1px solid var(--border);
-            box-shadow: var(--card-shadow);
-        }
-
-        .image-preview {
-            width: 100%;
-            min-height: 350px;
-            background: var(--bg-primary);
+            background: white;
             border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 20px 0;
-            border: 2px dashed var(--border);
-            overflow: hidden;
-        }
-
-        .image-preview img {
-            max-width: 100%;
-            max-height: 450px;
-            border-radius: 16px;
-        }
-
-        .prompt-input, .chat-input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid var(--border);
-            border-radius: 16px;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-size: 1rem;
-            margin: 15px 0;
-            font-family: inherit;
-        }
-
-        .chat-messages {
-            height: 500px;
-            overflow-y: auto;
-            padding: 20px;
-            background: var(--bg-primary);
-            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             margin-bottom: 20px;
+        }
+
+        /* Chat */
+        .chat-messages {
+            height: 450px;
+            overflow-y: auto;
+            padding: 15px;
+            background: #f7f9fc;
+            border-radius: 15px;
+            margin-bottom: 15px;
         }
 
         .message {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             display: flex;
-            gap: 12px;
             animation: fadeIn 0.3s ease;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .message.user {
@@ -213,83 +154,155 @@
         }
 
         .message-content {
-            max-width: 80%;
-            padding: 12px 20px;
-            border-radius: 20px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            line-height: 1.6;
+            max-width: 70%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            line-height: 1.5;
+        }
+
+        .message.bot .message-content {
+            background: white;
+            border: 1px solid #e0e0e0;
+            color: #333;
         }
 
         .message.user .message-content {
-            background: var(--accent);
+            background: #667eea;
             color: white;
-            border: none;
         }
 
         .message-content pre {
-            background: var(--code-bg);
-            color: var(--code-text);
+            background: #1e1e1e;
+            color: #d4d4d4;
             padding: 15px;
-            border-radius: 12px;
+            border-radius: 10px;
             overflow-x: auto;
             margin: 10px 0;
             font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             direction: ltr;
             text-align: left;
         }
 
         .message-content code {
-            background: var(--code-bg);
+            background: #f0f0f0;
             padding: 2px 6px;
-            border-radius: 6px;
+            border-radius: 5px;
             font-family: monospace;
-            font-size: 0.85rem;
         }
 
         .chat-input-area {
             display: flex;
-            gap: 12px;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        /* Image Generation */
+        .image-preview {
+            width: 100%;
+            min-height: 350px;
+            background: #f7f9fc;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            border: 2px dashed #ddd;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 10px;
+        }
+
+        .prompt-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            margin: 15px 0;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .modal-content select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
         }
 
         .footer {
             text-align: center;
-            padding: 25px;
-            margin-top: 40px;
-            border-top: 1px solid var(--border);
-            color: var(--text-secondary);
+            padding: 20px;
+            color: white;
+            margin-top: 20px;
         }
 
         .loading-spinner {
             width: 40px;
             height: 40px;
-            border: 4px solid var(--border);
-            border-top-color: var(--accent);
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 0 auto 15px;
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .copy-btn {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.75rem;
-            margin-top: 5px;
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         @media (max-width: 768px) {
-            .container { padding: 12px; }
-            .header { flex-direction: column; text-align: center; }
-            .message-content { max-width: 90%; }
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .message-content {
+                max-width: 85%;
+            }
+            .message-content pre {
+                font-size: 0.7rem;
+            }
         }
     </style>
 </head>
@@ -311,54 +324,63 @@
         </div>
 
         <div class="tabs">
-            <button class="tab-btn active" data-tab="chat">
+            <button class="tab-btn active" id="chatTabBtn">
                 <i class="fas fa-comments"></i> محادثة ذكية
             </button>
-            <button class="tab-btn" data-tab="image">
+            <button class="tab-btn" id="imageTabBtn">
                 <i class="fas fa-image"></i> توليد صور
             </button>
         </div>
 
-        <div id="chatTab" class="tab-content">
+        <!-- Chat Tab -->
+        <div id="chatPanel">
             <div class="card">
-                <h3 style="margin-bottom: 20px;">
+                <h3 style="margin-bottom: 15px;">
                     <i class="fas fa-code"></i> اسألني عن أي كود برمجي
                 </h3>
                 <div class="chat-messages" id="chatMessages">
                     <div class="message bot">
                         <div class="message-content">
-                            👋 مرحباً! أنا <strong>AI Abdulrahman Bashir</strong> من بينور RGP<br><br>
+                            👋 <strong>مرحباً! أنا AI Abdulrahman Bashir</strong><br><br>
                             💻 أنا مبرمج ذكي، أستطيع:<br>
                             • كتابة أكواد برمجية صحيحة بأي لغة<br>
                             • شرح الأكواد وتصحيح الأخطاء<br>
                             • إنشاء مواقع ويب كاملة<br>
                             • حل المشاكل البرمجية<br><br>
                             🎨 أيضاً يمكنني توليد صور واقعية!<br><br>
-                            <strong>اسألني أي شيء عن البرمجة أو اطلب مني كتابة كود!</strong>
+                            <strong>📝 جرب أن تسألني:</strong><br>
+                            • "اكتب لي كود موقع تسجيل دخول"<br>
+                            • "كود API بسيط"<br>
+                            • "شرح React للمبتدئين"<br>
+                            • "كود Python لقراءة ملف"<br>
+                            • "ما الفرق بين var و let في JavaScript"
                         </div>
                     </div>
                 </div>
                 <div class="chat-input-area">
-                    <input type="text" id="chatInput" class="chat-input" placeholder="مثال: اكتب لي كود موقع تسجيل دخول بسيط أو اشرح لي كيفية عمل API...">
-                    <button class="btn btn-primary" id="sendChatBtn">
+                    <input type="text" id="chatInput" class="chat-input" placeholder="اكتب سؤالك البرمجي هنا...">
+                    <button class="btn btn-primary" id="sendBtn">
                         <i class="fas fa-paper-plane"></i> إرسال
                     </button>
                 </div>
             </div>
         </div>
 
-        <div id="imageTab" class="tab-content" style="display: none;">
+        <!-- Image Tab -->
+        <div id="imagePanel" style="display: none;">
             <div class="card">
-                <h3 style="margin-bottom: 20px;"><i class="fas fa-palette"></i> توليد صور واقعية</h3>
-                <p style="color: var(--text-secondary); margin-bottom: 15px;">
-                    ✨ أدخل وصفاً تفصيلياً للحصول على صورة واقعية مع الحفاظ على ملامح الوجه الطبيعية
+                <h3 style="margin-bottom: 15px;">
+                    <i class="fas fa-palette"></i> توليد صور واقعية
+                </h3>
+                <p style="color: #666; margin-bottom: 15px;">
+                    ✨ أدخل وصفاً تفصيلياً للحصول على صورة واقعية
                 </p>
-                <textarea id="imagePrompt" class="prompt-input" rows="3" placeholder="مثال: شخص مبتسم في طبيعة خلابة، ملامح وجه واضحة وطبيعية، جودة عالية"></textarea>
+                <textarea id="imagePrompt" class="prompt-input" rows="3" placeholder="مثال: شخص مبتسم في حديقة، ملامح وجه طبيعية، جودة عالية"></textarea>
                 <button class="btn btn-primary" id="generateImageBtn" style="width: 100%;">
                     <i class="fas fa-magic"></i> إنشاء الصورة
                 </button>
                 <div id="imagePreview" class="image-preview">
-                    <div style="text-align: center; color: var(--text-secondary);">
+                    <div style="text-align: center; color: #999;">
                         <i class="fas fa-cloud-upload-alt fa-3x"></i>
                         <p style="margin-top: 10px;">الصورة ستظهر هنا</p>
                     </div>
@@ -367,55 +389,47 @@
         </div>
 
         <div class="footer">
-            <p>🚀 هذا الموقع من برمجة وتطوير <strong>Abdulrahman Bashir</strong> | بينور RGP<br>© 2025 جميع الحقوق محفوظة - مبرمج ذكي متخصص في كتابة الأكواد</p>
+            <p>🚀 هذا الموقع من برمجة وتطوير <strong>Abdulrahman Bashir</strong> | بينور RGP<br>© 2025 جميع الحقوق محفوظة</p>
         </div>
     </div>
 
     <!-- Settings Modal -->
-    <div id="settingsModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 1000;">
-        <div class="modal-content" style="background: var(--bg-secondary); padding: 35px; border-radius: 28px; width: 90%; max-width: 450px;">
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
             <h3>⚙️ الإعدادات</h3>
             <div style="margin: 20px 0;">
-                <label>🌐 اللغة:</label>
-                <select id="languageSelect" style="width: 100%; padding: 10px; margin-top: 8px; border-radius: 12px; background: var(--bg-primary); color: var(--text-primary);">
-                    <option value="ar">العربية</option>
-                    <option value="en">English</option>
-                </select>
-            </div>
-            <div style="margin: 20px 0;">
                 <label>🌙 المظهر:</label>
-                <select id="themeSelect" style="width: 100%; padding: 10px; margin-top: 8px; border-radius: 12px; background: var(--bg-primary); color: var(--text-primary);">
+                <select id="themeSelect">
                     <option value="light">☀️ فاتح</option>
                     <option value="dark">🌙 داكن</option>
                 </select>
             </div>
-            <button class="btn btn-primary" id="saveSettingsBtn" style="width: 100%;">
+            <button class="btn btn-primary" id="saveSettingsBtn" style="width: 100%; margin-top: 10px;">
                 حفظ الإعدادات
             </button>
-            <button class="btn btn-outline" id="closeSettingsBtn" style="width: 100%; margin-top: 10px;">
-                إغلاق
+            <button class="btn btn-outline" id="closeModalBtn" style="width: 100%; margin-top: 10px;">
+                إلغاء
             </button>
         </div>
     </div>
 
     <script>
-        // ========== الذكاء الاصطناعي المبرمج ==========
+        // ========== نظام الأكواد البرمجية ==========
         
-        // كتابة أكواد برمجية متقدمة
-        function generateCode(request) {
-            const q = request.toLowerCase();
+        function getProgrammingCode(question) {
+            const q = question.toLowerCase();
             
-            // كود HTML/CSS لموقع تسجيل دخول
-            if (q.includes('تسجيل دخول') || q.includes('login') || (q.includes('موقع') && q.includes('دخول'))) {
+            // كود موقع تسجيل دخول
+            if (q.includes('تسجيل دخول') || q.includes('login')) {
                 return `\`\`\`html
 <!DOCTYPE html>
 <html dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>صفحة تسجيل الدخول</title>
+    <title>تسجيل الدخول</title>
     <style>
         body {
-            font-family: 'Tahoma', sans-serif;
+            font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             justify-content: center;
@@ -423,11 +437,11 @@
             min-height: 100vh;
             margin: 0;
         }
-        .login-container {
+        .login-box {
             background: white;
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             width: 350px;
         }
         h2 {
@@ -459,10 +473,10 @@
     </style>
 </head>
 <body>
-    <div class="login-container">
+    <div class="login-box">
         <h2>تسجيل الدخول</h2>
-        <input type="text" placeholder="اسم المستخدم" id="username">
-        <input type="password" placeholder="كلمة المرور" id="password">
+        <input type="text" id="username" placeholder="اسم المستخدم">
+        <input type="password" id="password" placeholder="كلمة المرور">
         <button onclick="login()">دخول</button>
     </div>
     <script>
@@ -481,43 +495,43 @@
 \`\`\`
 
 📝 **شرح الكود:**
-- واجهة تسجيل دخول حديثة مع تدرج لوني
-- حقول إدخال مع التحقق من البيانات
+- تصميم عصري مع تدرج لوني
+- حقول إدخال مع التحقق
 - رسالة ترحيب عند تسجيل الدخول`;
             }
             
-            // كود JavaScript API
+            // كود API
             if (q.includes('api') || (q.includes('واجهة') && q.includes('برمجة'))) {
                 return `\`\`\`javascript
-// مثال على إنشاء API بسيط باستخدام Express.js
+// API بسيط باستخدام Node.js و Express
 const express = require('express');
 const app = express();
-const PORT = 3000;
+const port = 3000;
 
-// Middleware لقراءة JSON
+// middleware لقراءة JSON
 app.use(express.json());
 
-// قاعدة بيانات مؤقتة
+// بيانات تجريبية
 let users = [
-    { id: 1, name: 'Ahmed', email: 'ahmed@example.com' },
-    { id: 2, name: 'Sara', email: 'sara@example.com' }
+    { id: 1, name: 'أحمد', email: 'ahmed@example.com' },
+    { id: 2, name: 'سارة', email: 'sara@example.com' }
 ];
 
-// GET - جلب جميع المستخدمين
+// جلب جميع المستخدمين
 app.get('/api/users', (req, res) => {
     res.json({ success: true, data: users });
 });
 
-// GET - جلب مستخدم محدد
+// جلب مستخدم محدد
 app.get('/api/users/:id', (req, res) => {
     const user = users.find(u => u.id === parseInt(req.params.id));
-    if(!user) {
-        return res.status(404).json({ success: false, message: 'User not found' });
+    if (!user) {
+        return res.status(404).json({ success: false, message: 'المستخدم غير موجود' });
     }
     res.json({ success: true, data: user });
 });
 
-// POST - إضافة مستخدم جديد
+// إضافة مستخدم جديد
 app.post('/api/users', (req, res) => {
     const newUser = {
         id: users.length + 1,
@@ -528,232 +542,113 @@ app.post('/api/users', (req, res) => {
     res.status(201).json({ success: true, data: newUser });
 });
 
-// PUT - تحديث مستخدم
-app.put('/api/users/:id', (req, res) => {
-    const id = parseInt(req.params.id);
-    const userIndex = users.findIndex(u => u.id === id);
-    if(userIndex === -1) {
-        return res.status(404).json({ success: false, message: 'User not found' });
-    }
-    users[userIndex] = { ...users[userIndex], ...req.body };
-    res.json({ success: true, data: users[userIndex] });
-});
-
-// DELETE - حذف مستخدم
-app.delete('/api/users/:id', (req, res) => {
-    const id = parseInt(req.params.id);
-    users = users.filter(u => u.id !== id);
-    res.json({ success: true, message: 'User deleted' });
-});
-
-app.listen(PORT, () => {
-    console.log(\`Server running on http://localhost:\${PORT}\`);
+// تشغيل السيرفر
+app.listen(port, () => {
+    console.log(\`السيرفر يعمل على http://localhost:\${port}\`);
 });
 \`\`\`
 
-🔧 **كيفية الاستخدام:**
-1. تأكد من تثبيت Node.js
-2. npm install express
-3. node server.js
-4. اختبر API باستخدام Postman أو curl`;
+🔧 **كيفية التشغيل:**
+1. npm install express
+2. node server.js
+3. اختبر API باستخدام Postman`;
             }
             
-            // كود بايثون
+            // كود Python
             if (q.includes('بايثون') || q.includes('python')) {
                 return `\`\`\`python
-# مثال: تطبيق ويب باستخدام Flask
+# تطبيق بسيط باستخدام Flask
 from flask import Flask, render_template, request, jsonify
-import sqlite3
 
 app = Flask(__name__)
 
-# إنشاء قاعدة بيانات
-def init_db():
-    conn = sqlite3.connect('database.db')
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS tasks
-                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                  title TEXT NOT NULL,
-                  completed BOOLEAN DEFAULT 0)''')
-    conn.commit()
-    conn.close()
-
 # الصفحة الرئيسية
 @app.route('/')
-def index():
-    return render_template('index.html')
+def home():
+    return '''
+    <h1>مرحباً بك في موقعي</h1>
+    <p>هذا موقع تم إنشاؤه باستخدام Flask و Python</p>
+    <a href="/about">عن الموقع</a>
+    '''
 
-# API لجلب المهام
-@app.route('/api/tasks', methods=['GET'])
-def get_tasks():
-    conn = sqlite3.connect('database.db')
-    c = conn.cursor()
-    tasks = c.execute('SELECT * FROM tasks').fetchall()
-    conn.close()
-    return jsonify([{'id': t[0], 'title': t[1], 'completed': t[2]} for t in tasks])
+# صفحة عن الموقع
+@app.route('/about')
+def about():
+    return '<h1>عن الموقع</h1><p>تم تطوير هذا الموقع بواسطة AI Abdulrahman Bashir</p>'
 
-# API لإضافة مهمة
-@app.route('/api/tasks', methods=['POST'])
-def add_task():
-    data = request.json
-    conn = sqlite3.connect('database.db')
-    c = conn.cursor()
-    c.execute('INSERT INTO tasks (title) VALUES (?)', (data['title'],))
-    conn.commit()
-    conn.close()
-    return jsonify({'success': True})
+# API بسيط
+@app.route('/api/message', methods=['GET'])
+def api_message():
+    return jsonify({
+        'message': 'مرحباً! هذه واجهة برمجة تطبيقات باستخدام Flask',
+        'status': 'success'
+    })
 
 if __name__ == '__main__':
-    init_db()
     app.run(debug=True)
 \`\`\`
 
-🐍 **هذا الكود يبني:**
-- تطبيق Flask مع قاعدة بيانات SQLite
-- واجهة برمجة RESTful كاملة
-- إدارة المهام (To-Do List)`;
+🐍 **للتشغيل:**
+1. pip install flask
+2. python app.py
+3. افتح المتصفح على http://localhost:5000`;
             }
             
-            // كود React
-            if (q.includes('react') || q.includes('رياكت')) {
-                return `\`\`\`jsx
-// تطبيق React بسيط لإدارة المهام
-import React, { useState, useEffect } from 'react';
-import './App.css';
+            // شرح JavaScript
+            if (q.includes('var') && q.includes('let')) {
+                return `📚 **الفرق بين var و let في JavaScript**
 
-function App() {
-  const [tasks, setTasks] = useState([]);
-  const [inputValue, setInputValue] = useState('');
-
-  // تحميل المهام من localStorage
-  useEffect(() => {
-    const savedTasks = localStorage.getItem('tasks');
-    if (savedTasks) {
-      setTasks(JSON.parse(savedTasks));
-    }
-  }, []);
-
-  // حفظ المهام
-  useEffect(() => {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-  }, [tasks]);
-
-  // إضافة مهمة جديدة
-  const addTask = () => {
-    if (inputValue.trim()) {
-      setTasks([...tasks, {
-        id: Date.now(),
-        text: inputValue,
-        completed: false
-      }]);
-      setInputValue('');
-    }
-  };
-
-  // تبديل حالة المهمة
-  const toggleTask = (id) => {
-    setTasks(tasks.map(task =>
-      task.id === id ? { ...task, completed: !task.completed } : task
-    ));
-  };
-
-  // حذف مهمة
-  const deleteTask = (id) => {
-    setTasks(tasks.filter(task => task.id !== id));
-  };
-
-  return (
-    <div className="App">
-      <h1>📝 قائمة المهام</h1>
-      <div className="input-container">
-        <input
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && addTask()}
-          placeholder="أضف مهمة جديدة..."
-        />
-        <button onClick={addTask}>➕ إضافة</button>
-      </div>
-      <ul className="tasks-list">
-        {tasks.map(task => (
-          <li key={task.id} className={task.completed ? 'completed' : ''}>
-            <input
-              type="checkbox"
-              checked={task.completed}
-              onChange={() => toggleTask(task.id)}
-            />
-            <span>{task.text}</span>
-            <button onClick={() => deleteTask(task.id)}>🗑️</button>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+\`\`\`javascript
+// 1. النطاق (Scope)
+// var: نطاق دالة (Function Scope)
+if (true) {
+    var x = 10;  // متاحة خارج الـ if
 }
+console.log(x); // 10 - تعمل!
 
-export default App;
+// let: نطاق كتلة (Block Scope)
+if (true) {
+    let y = 20;  // متاحة فقط داخل الـ if
+}
+console.log(y); // خطأ! y is not defined
+
+// 2. إعادة التصريح (Redeclaration)
+var name = "أحمد";
+var name = "محمد"; // يعمل - إعادة تصريح مسموحة
+
+let age = 25;
+let age = 30; // خطأ! لا يمكن إعادة تصريح let
+
+// 3. الرفع (Hoisting)
+console.log(a); // undefined (يتم رفع var)
+var a = 5;
+
+console.log(b); // خطأ! لا يمكن الوصول قبل التصريح
+let b = 10;
+
+// ✅ أفضل الممارسات:
+// استخدم const بشكل افتراضي
+// استخدم let عندما تحتاج لإعادة التعيين
+// تجنب استخدام var تماماً
 \`\`\`
 
-⚛️ **مميزات هذا التطبيق:**
-- حفظ المهام في المتصفح
-- إضافة وحذف وتحديث المهام
-- تصميم تفاعلي مع React Hooks`;
+🎯 **خلاصة:**
+- **var**: قديمة، نطاق دالة، يمكن إعادة التصريح
+- **let**: حديثة، نطاق كتلة، لا يمكن إعادة التصريح
+- **const**: مثل let لكن قيمتها ثابتة لا تتغير`;
             }
             
             return null;
         }
         
-        // إجابات عامة وشرح برمجي
-        async function getAIResponse(question) {
+        // إجابات عامة
+        function getGeneralResponse(question) {
             const q = question.toLowerCase();
             
-            // التحقق من طلب كود برمجي
-            const codeResponse = generateCode(question);
-            if (codeResponse) {
-                return codeResponse;
-            }
-            
-            // أسئلة برمجية متنوعة
-            if (q.includes('ما الفرق بين') || q.includes('الفرق')) {
-                return `📚 **الفرق بين المفاهيم البرمجية:**
-
-أحتاج إلى معرفة بالضبط ما الذي تريد المقارنة بينه؟ مثلاً:
-- **var vs let vs const** في JavaScript
-- **React vs Vue** في الأطر الأمامية
-- **SQL vs NoSQL** في قواعد البيانات
-
-أخبرني بالمفهومين وسأشرح لك الفروقات بالتفصيل مع أمثلة!`;
-            }
-            
-            if (q.includes('شرح') || q.includes('كيف يعمل') || q.includes('كيفية')) {
-                return `🔍 **شرح تفصيلي:**
-
-يمكنني شرح أي مفهوم برمجي تريده:
-- **JavaScript:** closures, promises, async/await
-- **Python:** decorators, generators, OOP
-- **HTML/CSS:** flexbox, grid, animations
-- **Frameworks:** React, Vue, Django, Flask
-
-قل لي بالضبط ما تريد شرحه وسأقدم لك شرحاً وافياً مع أمثلة!`;
-            }
-            
-            if (q.includes('خطأ') || q.includes('error') || q.includes('bug')) {
-                return `🐛 **تصحيح الأخطاء البرمجية:**
-
-لأتمكن من مساعدتك في إصلاح الخطأ، أرسل لي:
-1. الكود الذي يظهر فيه الخطأ
-2. رسالة الخطأ كاملة
-3. اللغة أو الإطار المستخدم
-
-سأقوم بتحليل المشكلة وإعطائك الحل الصحيح مع الشرح!`;
-            }
-            
-            // ردود الترحيب والتعريف
             if (q.includes('مرحبا') || q.includes('السلام') || q.includes('اهلا')) {
                 const greetings = [
-                    'وعليكم السلام ورحمة الله! أنا AI Abdulrahman Bashir، مبرمج ذكي من بينور RGP. كيف يمكنني مساعدتك في كتابة الأكواد؟',
-                    'أهلاً بك! أنا هنا لمساعدتك في البرمجة. اطلب مني أي كود وسأكتبه لك بدقة واحترافية!',
+                    'وعليكم السلام! أنا AI Abdulrahman Bashir، مبرمج ذكي. كيف يمكنني مساعدتك في البرمجة؟',
+                    'أهلاً بك! اطلب مني أي كود برمجي وسأكتبه لك بدقة واحترافية!',
                     'السلام عليكم! تفضل بطرح سؤالك البرمجي، وسأقدم لك الحل الأمثل مع شرح وافٍ.'
                 ];
                 return greetings[Math.floor(Math.random() * greetings.length)];
@@ -762,151 +657,193 @@ export default App;
             if (q.includes('من أنت') || q.includes('اسمك')) {
                 return `🤖 **أنا AI Abdulrahman Bashir**
 
-✨ **مطور ومبرمج ذكي من بينور RGP**
-💻 **متخصص في:**
-- كتابة أكواد برمجية صحيحة بجميع اللغات
-- شرح المفاهيم البرمجية المعقدة
-- تصميم مواقع ويب كاملة
-- حل مشاكل البرمجة وتصحيح الأخطاء
-- توليد صور واقعية بالذكاء الاصطناعي
+💻 **مبرمج ذكي من بينور RGP**
+✨ **متخصص في:**
+- كتابة أكواد برمجية صحيحة
+- شرح المفاهيم البرمجية
+- إنشاء مواقع ويب كاملة
+- حل مشاكل البرمجة
 
-🚀 **اطلب مني أي كود وسأكتبه لك فوراً!**`;
+📝 **اطلب مني أي كود وسأكتبه لك!**`;
             }
             
             if (q.includes('شكر')) {
-                const thanks = [
-                    'العفو! سعيد بخدمتك 🤍 هل تريد مساعدة إضافية في البرمجة؟',
-                    'على الرحب والسعة! أنا هنا دائماً لأي استفسار برمجي',
-                    'لا شكر على واجب! تفضل بأي سؤال آخر في البرمجة'
-                ];
-                return thanks[Math.floor(Math.random() * thanks.length)];
+                return 'العفو! سعيد بخدمتك 🤍 هل تريد مساعدة إضافية في البرمجة؟';
             }
             
-            if (q.includes('صور') || q.includes('توليد')) {
-                return `🎨 **لتوليد الصور:**
-
-اذهب إلى تبويب "توليد صور" وأدخل وصفاً تفصيلياً للصورة التي تريدها.
-مثال: "شخص مبتسم في حديقة، ملامح وجه طبيعية، جودة عالية"
-
-يمكنني أيضاً مساعدتك في كتابة كود لتوليد الصور باستخدام APIs مثل DALL-E أو Stable Diffusion!`;
+            return null;
+        }
+        
+        // الدالة الرئيسية للرد
+        async function getAIResponse(question) {
+            // البحث عن كود برمجي
+            let codeResponse = getProgrammingCode(question);
+            if (codeResponse) {
+                return codeResponse;
+            }
+            
+            // البحث عن رد عام
+            let generalResponse = getGeneralResponse(question);
+            if (generalResponse) {
+                return generalResponse;
             }
             
             // ردود برمجية عامة
-            const programmingResponses = [
-                `💻 **أنا مستعد لمساعدتك برمجياً!**
+            const programmingTips = [
+                `💻 **أنا مستعد لكتابة أي كود برمجي!**
 
 اطلب مني:
 - كود موقع ويب كامل
+- كود API
+- شرح لغة برمجة
 - حل مشكلة برمجية
-- شرح مفهوم معين
-- تحسين أداء كود
 
-ما الذي تريد كتابته بالضبط؟`,
+**مثال:** "اكتب لي كود موقع متجر إلكتروني بسيط"`,
                 `🔧 **مبرمج ذكي تحت خدمتك!**
 
 يمكنني كتابة أكواد بـ:
 - HTML/CSS/JavaScript
 - Python (Flask, Django)
-- React.js / Vue.js
-- SQL / MongoDB
-- وأي لغة تريدها!
+- React.js
+- Node.js
 
-أخبرني بالمطلوب وسأكتبه لك فوراً.`,
+أخبرني بالمطلوب وسأكتبه لك فوراً!`,
                 `✨ **مرحباً بك في مساعد البرمجة الذكي!**
 
 لدي خبرة في:
 ✅ إنشاء مواقع متجاوبة
-✅ تصميم واجهات مستخدم احترافية
+✅ تصميم واجهات احترافية
 ✅ كتابة APIs متكاملة
-✅ حل مشاكل الأداء
 
-ما المشروع الذي تعمل عليه؟`
+ما الكود الذي تريد كتابته اليوم؟`
             ];
             
-            return programmingResponses[Math.floor(Math.random() * programmingResponses.length)];
+            return programmingTips[Math.floor(Math.random() * programmingTips.length)];
         }
         
         // توليد الصور
         async function generateImage(prompt) {
-            const enhancedPrompt = `${prompt}, realistic photo, high quality, detailed face, natural lighting, 4k, ultra realistic, professional photography`;
-            return `https://image.pollinations.ai/prompt/${encodeURIComponent(enhancedPrompt)}?width=1024&height=1024&nologo=true`;
+            const encodedPrompt = encodeURIComponent(prompt + ", realistic, high quality, detailed");
+            return `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1024&height=1024`;
         }
         
-        // ========== إعدادات الواجهة ==========
+        // ========== إدارة الواجهة ==========
+        
         let currentTheme = 'light';
         
         function applyTheme() {
             if (currentTheme === 'dark') {
-                document.body.classList.add('dark');
-            } else {
-                document.body.classList.remove('dark');
-            }
-            localStorage.setItem('app_theme', currentTheme);
-        }
-        
-        function loadSettings() {
-            const savedTheme = localStorage.getItem('app_theme');
-            if (savedTheme) currentTheme = savedTheme;
-            applyTheme();
-            if (document.getElementById('themeSelect')) {
-                document.getElementById('themeSelect').value = currentTheme;
-            }
-        }
-        
-        // ========== بدء التطبيق ==========
-        document.addEventListener('DOMContentLoaded', () => {
-            loadSettings();
-            
-            // التبويبات
-            const tabs = document.querySelectorAll('.tab-btn');
-            const chatTab = document.getElementById('chatTab');
-            const imageTab = document.getElementById('imageTab');
-            
-            tabs.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    tabs.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    if (btn.dataset.tab === 'chat') {
-                        chatTab.style.display = 'block';
-                        imageTab.style.display = 'none';
-                    } else {
-                        chatTab.style.display = 'none';
-                        imageTab.style.display = 'block';
-                    }
+                document.body.style.background = '#1a1a2e';
+                document.querySelectorAll('.card').forEach(card => {
+                    card.style.background = '#16213e';
+                    card.style.color = '#fff';
                 });
+                document.querySelectorAll('.chat-messages').forEach(chat => {
+                    chat.style.background = '#0f3460';
+                });
+                document.querySelectorAll('.message.bot .message-content').forEach(msg => {
+                    msg.style.background = '#1a1a2e';
+                    msg.style.color = '#fff';
+                    msg.style.borderColor = '#333';
+                });
+                document.querySelector('.header').style.background = '#16213e';
+                document.querySelector('.header').style.color = '#fff';
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.style.background = '#16213e';
+                    btn.style.color = '#fff';
+                });
+            } else {
+                document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                document.querySelectorAll('.card').forEach(card => {
+                    card.style.background = 'white';
+                    card.style.color = '#333';
+                });
+                document.querySelectorAll('.chat-messages').forEach(chat => {
+                    chat.style.background = '#f7f9fc';
+                });
+                document.querySelectorAll('.message.bot .message-content').forEach(msg => {
+                    msg.style.background = 'white';
+                    msg.style.color = '#333';
+                    msg.style.borderColor = '#e0e0e0';
+                });
+                document.querySelector('.header').style.background = 'white';
+                document.querySelector('.header').style.color = '#333';
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.style.background = 'white';
+                    btn.style.color = '#333';
+                });
+            }
+        }
+        
+        // ========== تهيئة الصفحة ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            // التبديل بين التبويبات
+            const chatTabBtn = document.getElementById('chatTabBtn');
+            const imageTabBtn = document.getElementById('imageTabBtn');
+            const chatPanel = document.getElementById('chatPanel');
+            const imagePanel = document.getElementById('imagePanel');
+            
+            chatTabBtn.addEventListener('click', function() {
+                chatTabBtn.classList.add('active');
+                imageTabBtn.classList.remove('active');
+                chatPanel.style.display = 'block';
+                imagePanel.style.display = 'none';
             });
             
-            // إعدادات
-            const settingsBtn = document.getElementById('settingsBtn');
-            const settingsModal = document.getElementById('settingsModal');
-            const saveSettingsBtn = document.getElementById('saveSettingsBtn');
-            const closeSettingsBtn = document.getElementById('closeSettingsBtn');
-            
-            settingsBtn.addEventListener('click', () => {
-                settingsModal.style.display = 'flex';
+            imageTabBtn.addEventListener('click', function() {
+                imageTabBtn.classList.add('active');
+                chatTabBtn.classList.remove('active');
+                chatPanel.style.display = 'none';
+                imagePanel.style.display = 'block';
             });
             
-            function closeSettings() {
-                settingsModal.style.display = 'none';
+            // المحادثة
+            const sendBtn = document.getElementById('sendBtn');
+            const chatInput = document.getElementById('chatInput');
+            const chatMessages = document.getElementById('chatMessages');
+            
+            async function sendMessage() {
+                const message = chatInput.value.trim();
+                if (!message) return;
+                
+                // إضافة رسالة المستخدم
+                const userDiv = document.createElement('div');
+                userDiv.className = 'message user';
+                userDiv.innerHTML = `<div class="message-content">${message.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>`;
+                chatMessages.appendChild(userDiv);
+                chatInput.value = '';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // إظهار مؤشر الكتابة
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'message bot';
+                typingDiv.innerHTML = `<div class="message-content"><i class="fas fa-spinner fa-spin"></i> جاري الكتابة...</div>`;
+                chatMessages.appendChild(typingDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // الحصول على الرد
+                const response = await getAIResponse(message);
+                typingDiv.remove();
+                
+                // إضافة رد البوت
+                const botDiv = document.createElement('div');
+                botDiv.className = 'message bot';
+                let formattedResponse = response
+                    .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+                    .replace(/\n/g, '<br>');
+                botDiv.innerHTML = `<div class="message-content">${formattedResponse}</div>`;
+                chatMessages.appendChild(botDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
             }
             
-            saveSettingsBtn.addEventListener('click', () => {
-                currentTheme = document.getElementById('themeSelect').value;
-                applyTheme();
-                closeSettings();
-            });
-            
-            closeSettingsBtn.addEventListener('click', closeSettings);
-            
-            window.addEventListener('click', (e) => {
-                if (e.target === settingsModal) closeSettings();
+            sendBtn.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') sendMessage();
             });
             
             // مسح المحادثة
-            const clearChatBtn = document.getElementById('clearChatBtn');
-            const chatMessages = document.getElementById('chatMessages');
-            
-            clearChatBtn.addEventListener('click', () => {
+            const clearBtn = document.getElementById('clearChatBtn');
+            clearBtn.addEventListener('click', function() {
                 chatMessages.innerHTML = `
                     <div class="message bot">
                         <div class="message-content">
@@ -917,54 +854,12 @@ export default App;
                 `;
             });
             
-            // المحادثة
-            const sendBtn = document.getElementById('sendChatBtn');
-            const chatInput = document.getElementById('chatInput');
-            
-            async function sendMessage() {
-                const msg = chatInput.value.trim();
-                if (!msg) return;
-                
-                const userMsgDiv = document.createElement('div');
-                userMsgDiv.className = 'message user';
-                userMsgDiv.innerHTML = `<div class="message-content">${msg.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>`;
-                chatMessages.appendChild(userMsgDiv);
-                chatInput.value = '';
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                
-                const typingDiv = document.createElement('div');
-                typingDiv.className = 'message bot';
-                typingDiv.innerHTML = `<div class="message-content"><i class="fas fa-spinner fa-spin"></i> جاري الكتابة...</div>`;
-                chatMessages.appendChild(typingDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                
-                const response = await getAIResponse(msg);
-                typingDiv.remove();
-                
-                const botMsgDiv = document.createElement('div');
-                botMsgDiv.className = 'message bot';
-                // تحويل النص إلى HTML مع دعم Markdown للكود
-                let formattedResponse = response
-                    .replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
-                        return `<pre><code class="${lang || 'javascript'}">${code.trim()}</code></pre>`;
-                    })
-                    .replace(/\n/g, '<br>');
-                botMsgDiv.innerHTML = `<div class="message-content">${formattedResponse}</div>`;
-                chatMessages.appendChild(botMsgDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-            
-            sendBtn.addEventListener('click', sendMessage);
-            chatInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') sendMessage();
-            });
-            
             // توليد الصور
-            const genBtn = document.getElementById('generateImageBtn');
+            const generateBtn = document.getElementById('generateImageBtn');
             const imagePrompt = document.getElementById('imagePrompt');
             const imagePreview = document.getElementById('imagePreview');
             
-            genBtn.addEventListener('click', async () => {
+            generateBtn.addEventListener('click', async function() {
                 const prompt = imagePrompt.value.trim();
                 if (!prompt) {
                     alert('❌ الرجاء إدخال وصف للصورة');
@@ -979,9 +874,40 @@ export default App;
                 `;
                 
                 const imageUrl = await generateImage(prompt);
-                imagePreview.innerHTML = `<img src="${imageUrl}" alt="Generated Image" style="max-width:100%; border-radius:16px;">`;
+                imagePreview.innerHTML = `<img src="${imageUrl}" alt="Generated Image" style="max-width:100%; border-radius:10px;">`;
             });
+            
+            // الإعدادات
+            const settingsBtn = document.getElementById('settingsBtn');
+            const settingsModal = document.getElementById('settingsModal');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+            const themeSelect = document.getElementById('themeSelect');
+            
+            settingsBtn.addEventListener('click', function() {
+                settingsModal.style.display = 'flex';
+            });
+            
+            closeModalBtn.addEventListener('click', function() {
+                settingsModal.style.display = 'none';
+            });
+            
+            saveSettingsBtn.addEventListener('click', function() {
+                currentTheme = themeSelect.value;
+                applyTheme();
+                settingsModal.style.display = 'none';
+                alert('تم حفظ الإعدادات بنجاح!');
+            });
+            
+            window.addEventListener('click', function(e) {
+                if (e.target === settingsModal) {
+                    settingsModal.style.display = 'none';
+                }
+            });
+            
+            // تطبيق الثيم الافتراضي
+            applyTheme();
         });
     </script>
 </body>
-                                                   </html>
+</html>
