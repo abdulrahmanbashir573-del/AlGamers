@@ -22,8 +22,8 @@
             --accent-hover: #2563eb;
             --border: #e2e8f0;
             --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            --success: #10b981;
-            --danger: #ef4444;
+            --code-bg: #1e293b;
+            --code-text: #e2e8f0;
         }
 
         body.dark {
@@ -32,6 +32,7 @@
             --text-primary: #f1f5f9;
             --text-secondary: #cbd5e1;
             --border: #334155;
+            --code-bg: #0f172a;
         }
 
         body {
@@ -45,7 +46,7 @@
         }
 
         .container {
-            max-width: 1300px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -78,7 +79,7 @@
             color: var(--text-secondary);
         }
 
-        .user-controls {
+        .controls {
             display: flex;
             gap: 12px;
             align-items: center;
@@ -116,11 +117,6 @@
 
         .btn-outline:hover {
             background: var(--accent);
-            color: white;
-        }
-
-        .btn-danger {
-            background: var(--danger);
             color: white;
         }
 
@@ -192,7 +188,7 @@
         }
 
         .chat-messages {
-            height: 450px;
+            height: 500px;
             overflow-y: auto;
             padding: 20px;
             background: var(--bg-primary);
@@ -217,12 +213,12 @@
         }
 
         .message-content {
-            max-width: 70%;
+            max-width: 80%;
             padding: 12px 20px;
             border-radius: 20px;
             background: var(--bg-secondary);
             border: 1px solid var(--border);
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         .message.user .message-content {
@@ -231,41 +227,30 @@
             border: none;
         }
 
+        .message-content pre {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 15px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .message-content code {
+            background: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+
         .chat-input-area {
             display: flex;
             gap: 12px;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background: var(--bg-secondary);
-            padding: 35px;
-            border-radius: 28px;
-            width: 90%;
-            max-width: 450px;
-        }
-
-        .modal-content input {
-            width: 100%;
-            padding: 12px 16px;
-            margin: 12px 0;
-            border: 2px solid var(--border);
-            border-radius: 14px;
-            background: var(--bg-primary);
-            color: var(--text-primary);
         }
 
         .footer {
@@ -290,19 +275,21 @@
             to { transform: rotate(360deg); }
         }
 
-        .user-badge {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--bg-primary);
-            padding: 8px 16px;
-            border-radius: 40px;
+        .copy-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            margin-top: 5px;
         }
 
         @media (max-width: 768px) {
             .container { padding: 12px; }
             .header { flex-direction: column; text-align: center; }
-            .message-content { max-width: 85%; }
+            .message-content { max-width: 90%; }
         }
     </style>
 </head>
@@ -311,15 +298,14 @@
         <div class="header">
             <div class="logo-area">
                 <h1>🤖 AI Abdulrahman Bashir</h1>
-                <p>⚡ بينور RGP | الذكاء الاصطناعي المتطور</p>
+                <p>⚡ بينور RGP | مبرمج ذكي | منشئ أكواد برمجية</p>
             </div>
-            <div class="user-controls">
-                <div id="userInfo"></div>
+            <div class="controls">
                 <button class="btn btn-outline" id="settingsBtn">
                     <i class="fas fa-cog"></i> الإعدادات
                 </button>
-                <button class="btn btn-primary" id="authBtn">
-                    <i class="fas fa-user"></i> دخول
+                <button class="btn btn-outline" id="clearChatBtn">
+                    <i class="fas fa-trash"></i> مسح المحادثة
                 </button>
             </div>
         </div>
@@ -335,17 +321,25 @@
 
         <div id="chatTab" class="tab-content">
             <div class="card">
-                <h3 style="margin-bottom: 20px;"><i class="fas fa-robot"></i> اسألني أي شيء</h3>
+                <h3 style="margin-bottom: 20px;">
+                    <i class="fas fa-code"></i> اسألني عن أي كود برمجي
+                </h3>
                 <div class="chat-messages" id="chatMessages">
                     <div class="message bot">
                         <div class="message-content">
-                            👋 مرحباً! أنا مساعدك الذكي Abdulrahman Bashir.<br>
-                            اسألني أي شيء وسأجيبك بسرعة ودقة!
+                            👋 مرحباً! أنا <strong>AI Abdulrahman Bashir</strong> من بينور RGP<br><br>
+                            💻 أنا مبرمج ذكي، أستطيع:<br>
+                            • كتابة أكواد برمجية صحيحة بأي لغة<br>
+                            • شرح الأكواد وتصحيح الأخطاء<br>
+                            • إنشاء مواقع ويب كاملة<br>
+                            • حل المشاكل البرمجية<br><br>
+                            🎨 أيضاً يمكنني توليد صور واقعية!<br><br>
+                            <strong>اسألني أي شيء عن البرمجة أو اطلب مني كتابة كود!</strong>
                         </div>
                     </div>
                 </div>
                 <div class="chat-input-area">
-                    <input type="text" id="chatInput" class="chat-input" placeholder="اكتب سؤالك هنا...">
+                    <input type="text" id="chatInput" class="chat-input" placeholder="مثال: اكتب لي كود موقع تسجيل دخول بسيط أو اشرح لي كيفية عمل API...">
                     <button class="btn btn-primary" id="sendChatBtn">
                         <i class="fas fa-paper-plane"></i> إرسال
                     </button>
@@ -359,7 +353,7 @@
                 <p style="color: var(--text-secondary); margin-bottom: 15px;">
                     ✨ أدخل وصفاً تفصيلياً للحصول على صورة واقعية مع الحفاظ على ملامح الوجه الطبيعية
                 </p>
-                <textarea id="imagePrompt" class="prompt-input" rows="3" placeholder="مثال: شخص مبتسم في طبيعة خلابة، ملامح وجه واضحة وطبيعية..."></textarea>
+                <textarea id="imagePrompt" class="prompt-input" rows="3" placeholder="مثال: شخص مبتسم في طبيعة خلابة، ملامح وجه واضحة وطبيعية، جودة عالية"></textarea>
                 <button class="btn btn-primary" id="generateImageBtn" style="width: 100%;">
                     <i class="fas fa-magic"></i> إنشاء الصورة
                 </button>
@@ -373,42 +367,24 @@
         </div>
 
         <div class="footer">
-            <p>🚀 هذا الموقع من برمجة وتطوير <strong>Abdulrahman Bashir</strong> | بينور RGP<br>© 2025 جميع الحقوق محفوظة</p>
-        </div>
-    </div>
-
-    <!-- Auth Modal -->
-    <div id="authModal" class="modal">
-        <div class="modal-content">
-            <h3 id="modalTitle">🔐 تسجيل الدخول</h3>
-            <input type="email" id="authEmail" placeholder="البريد الإلكتروني">
-            <input type="password" id="authPassword" placeholder="كلمة المرور">
-            <button class="btn btn-primary" id="submitAuthBtn" style="width: 100%; margin: 10px 0;">
-                تسجيل الدخول
-            </button>
-            <button class="btn btn-outline" id="switchAuthBtn" style="width: 100%; margin: 5px 0;">
-                إنشاء حساب جديد
-            </button>
-            <button class="btn btn-outline" id="closeModalBtn" style="width: 100%; margin: 5px 0;">
-                إلغاء
-            </button>
+            <p>🚀 هذا الموقع من برمجة وتطوير <strong>Abdulrahman Bashir</strong> | بينور RGP<br>© 2025 جميع الحقوق محفوظة - مبرمج ذكي متخصص في كتابة الأكواد</p>
         </div>
     </div>
 
     <!-- Settings Modal -->
-    <div id="settingsModal" class="modal">
-        <div class="modal-content">
+    <div id="settingsModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 1000;">
+        <div class="modal-content" style="background: var(--bg-secondary); padding: 35px; border-radius: 28px; width: 90%; max-width: 450px;">
             <h3>⚙️ الإعدادات</h3>
             <div style="margin: 20px 0;">
                 <label>🌐 اللغة:</label>
-                <select id="languageSelect" style="width: 100%; padding: 10px; margin-top: 8px; border-radius: 12px;">
+                <select id="languageSelect" style="width: 100%; padding: 10px; margin-top: 8px; border-radius: 12px; background: var(--bg-primary); color: var(--text-primary);">
                     <option value="ar">العربية</option>
                     <option value="en">English</option>
                 </select>
             </div>
             <div style="margin: 20px 0;">
                 <label>🌙 المظهر:</label>
-                <select id="themeSelect" style="width: 100%; padding: 10px; margin-top: 8px; border-radius: 12px;">
+                <select id="themeSelect" style="width: 100%; padding: 10px; margin-top: 8px; border-radius: 12px; background: var(--bg-primary); color: var(--text-primary);">
                     <option value="light">☀️ فاتح</option>
                     <option value="dark">🌙 داكن</option>
                 </select>
@@ -416,192 +392,447 @@
             <button class="btn btn-primary" id="saveSettingsBtn" style="width: 100%;">
                 حفظ الإعدادات
             </button>
+            <button class="btn btn-outline" id="closeSettingsBtn" style="width: 100%; margin-top: 10px;">
+                إغلاق
+            </button>
         </div>
     </div>
 
     <script>
-        // ========== نظام المستخدمين ==========
-        let currentUser = null;
+        // ========== الذكاء الاصطناعي المبرمج ==========
         
-        // تهيئة المستخدمين الافتراضيين
-        function initUsers() {
-            if (!localStorage.getItem('app_users')) {
-                const defaultUsers = [
-                    { id: '1', email: 'test@test.com', password: '123456', name: 'Test User' },
-                    { id: '2', email: 'user@example.com', password: '123456', name: 'Example User' }
-                ];
-                localStorage.setItem('app_users', JSON.stringify(defaultUsers));
-            }
+        // كتابة أكواد برمجية متقدمة
+        function generateCode(request) {
+            const q = request.toLowerCase();
+            
+            // كود HTML/CSS لموقع تسجيل دخول
+            if (q.includes('تسجيل دخول') || q.includes('login') || (q.includes('موقع') && q.includes('دخول'))) {
+                return `\`\`\`html
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>صفحة تسجيل الدخول</title>
+    <style>
+        body {
+            font-family: 'Tahoma', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
         }
-        
-        function register(email, password) {
-            const users = JSON.parse(localStorage.getItem('app_users') || '[]');
-            
-            if (users.find(u => u.email === email)) {
-                return { success: false, message: 'البريد الإلكتروني مسجل بالفعل' };
-            }
-            
-            const newUser = {
-                id: Date.now().toString(),
-                email: email,
-                password: password,
-                name: email.split('@')[0],
-                createdAt: new Date().toISOString()
-            };
-            
-            users.push(newUser);
-            localStorage.setItem('app_users', JSON.stringify(users));
-            
-            currentUser = { email: newUser.email, name: newUser.name, id: newUser.id };
-            localStorage.setItem('current_user', JSON.stringify(currentUser));
-            
-            return { success: true, message: 'تم إنشاء الحساب بنجاح' };
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            width: 350px;
         }
-        
-        function login(email, password) {
-            const users = JSON.parse(localStorage.getItem('app_users') || '[]');
-            const user = users.find(u => u.email === email && u.password === password);
-            
-            if (user) {
-                currentUser = { email: user.email, name: user.name, id: user.id };
-                localStorage.setItem('current_user', JSON.stringify(currentUser));
-                return { success: true, message: 'تم تسجيل الدخول بنجاح' };
-            }
-            
-            return { success: false, message: 'البريد الإلكتروني أو كلمة المرور غير صحيحة' };
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
         }
-        
-        function logout() {
-            currentUser = null;
-            localStorage.removeItem('current_user');
-            updateUIForUser();
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
         }
-        
-        function checkLoggedIn() {
-            const saved = localStorage.getItem('current_user');
-            if (saved) {
-                currentUser = JSON.parse(saved);
-            }
-            updateUIForUser();
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
         }
-        
-        function updateUIForUser() {
-            const userInfoDiv = document.getElementById('userInfo');
-            const authBtn = document.getElementById('authBtn');
-            
-            if (currentUser) {
-                userInfoDiv.innerHTML = `
-                    <div class="user-badge">
-                        <i class="fas fa-user-circle"></i>
-                        <span>${currentUser.name || currentUser.email.split('@')[0]}</span>
-                    </div>
-                `;
-                authBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> خروج';
-                authBtn.classList.remove('btn-primary');
-                authBtn.classList.add('btn-danger');
+        button:hover {
+            background: #5a67d8;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>تسجيل الدخول</h2>
+        <input type="text" placeholder="اسم المستخدم" id="username">
+        <input type="password" placeholder="كلمة المرور" id="password">
+        <button onclick="login()">دخول</button>
+    </div>
+    <script>
+        function login() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            if(user && pass) {
+                alert('مرحباً ' + user + '! تم تسجيل الدخول بنجاح');
             } else {
-                userInfoDiv.innerHTML = '';
-                authBtn.innerHTML = '<i class="fas fa-user"></i> دخول';
-                authBtn.classList.remove('btn-danger');
-                authBtn.classList.add('btn-primary');
+                alert('الرجاء إدخال جميع البيانات');
             }
         }
-        
-        // ========== الذكاء الاصطناعي ==========
-        const responseHistory = [];
-        
-        function getRandomResponse(question, category) {
-            const responses = {
-                greeting: [
-                    'وعليكم السلام ورحمة الله! كيف يمكنني مساعدتك اليوم؟',
-                    'أهلاً بك! يسعدني تواصلك معي، كيف أقدر أخدمك؟',
-                    'السلام عليكم! أنا جاهز للإجابة على أسئلتك',
-                    'مرحباً! تفضل بطرح سؤالك وسأجيبك بأفضل صورة'
-                ],
-                about: [
-                    'أنا مساعد ذكي تم تطويره بواسطة Abdulrahman Bashir من بينور RGP، متخصص في الإجابة على الأسئلة وتوليد الصور',
-                    'اسمي AI Abdulrahman Bashir، وأنا تحت إشراف بينور RGP، تم برمجتي لتقديم إجابات دقيقة وسريعة',
-                    'أنا نموذج ذكاء اصطناعي متطور، صممني Abdulrahman Bashir لخدمتك في المحادثة وتوليد الصور'
-                ],
-                thanks: [
-                    'العفو! سعيد بخدمتك 🤍',
-                    'على الرحب والسعة! أنا هنا لمساعدتك دائماً',
-                    'لا شكر على واجب، تفضل بأي سؤال آخر',
-                    'أهلاً بك! هل تريد مساعدة إضافية؟'
-                ],
-                image: [
-                    'لتوليد الصور، انتقل إلى قسم "توليد صور" وأدخل وصفاً تفصيلياً للصورة التي ترغب فيها',
-                    'يمكنك استخدام خاصية توليد الصور في التبويب الثاني، أدخل وصفاً دقيقاً للحصول على أفضل النتائج',
-                    'قسم توليد الصور ينتظرك! اكتب وصفاً للصورة التي تريدها وسأقوم بإنشائها لك'
-                ],
-                weather: [
-                    'للحصول على معلومات الطقس بدقة، أنصحك بالبحث في محرك البحث أو استخدام تطبيقات الطقس المتخصصة',
-                    'حالياً لا أملك بيانات الطقس المباشرة، لكن يمكنني مساعدتك في مواضيع أخرى',
-                    'معلومات الطقس تحتاج إلى مصدر متخصص، جرب البحث في Google للحصول على تحديثات دقيقة'
-                ],
-                creator: [
-                    'تم تطوير هذا الموقع بالكامل بواسطة Abdulrahman Bashir من بينور RGP',
-                    'المبرمج والمطور: Abdulrahman Bashir، تحت إشراف بينور RGP',
-                    'هذا العمل هو من إبداع وبرمجة Abdulrahman Bashir، وبإشراف بينور RGP'
-                ],
-                default: [
-                    `سؤالك "${question}" مهم جداً. دعني أفكر في إجابة دقيقة لك...`,
-                    `شكراً على سؤالك! بخصوص "${question}"، هذا موضوع مثير للاهتمام.`,
-                    `سؤال رائع! "${question}" - سأقدم لك أفضل إجابة ممكنة.`,
-                    `أهتمامك بهذا السؤال يسرني! "${question}" - دعني أشاركك معلومات مفيدة.`
-                ]
-            };
+    </script>
+</body>
+</html>
+\`\`\`
+
+📝 **شرح الكود:**
+- واجهة تسجيل دخول حديثة مع تدرج لوني
+- حقول إدخال مع التحقق من البيانات
+- رسالة ترحيب عند تسجيل الدخول`;
+            }
             
-            const categoryResponses = responses[category] || responses.default;
-            const usedIndex = responseHistory.filter(r => r.category === category).length % categoryResponses.length;
-            const response = categoryResponses[usedIndex % categoryResponses.length];
+            // كود JavaScript API
+            if (q.includes('api') || (q.includes('واجهة') && q.includes('برمجة'))) {
+                return `\`\`\`javascript
+// مثال على إنشاء API بسيط باستخدام Express.js
+const express = require('express');
+const app = express();
+const PORT = 3000;
+
+// Middleware لقراءة JSON
+app.use(express.json());
+
+// قاعدة بيانات مؤقتة
+let users = [
+    { id: 1, name: 'Ahmed', email: 'ahmed@example.com' },
+    { id: 2, name: 'Sara', email: 'sara@example.com' }
+];
+
+// GET - جلب جميع المستخدمين
+app.get('/api/users', (req, res) => {
+    res.json({ success: true, data: users });
+});
+
+// GET - جلب مستخدم محدد
+app.get('/api/users/:id', (req, res) => {
+    const user = users.find(u => u.id === parseInt(req.params.id));
+    if(!user) {
+        return res.status(404).json({ success: false, message: 'User not found' });
+    }
+    res.json({ success: true, data: user });
+});
+
+// POST - إضافة مستخدم جديد
+app.post('/api/users', (req, res) => {
+    const newUser = {
+        id: users.length + 1,
+        name: req.body.name,
+        email: req.body.email
+    };
+    users.push(newUser);
+    res.status(201).json({ success: true, data: newUser });
+});
+
+// PUT - تحديث مستخدم
+app.put('/api/users/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const userIndex = users.findIndex(u => u.id === id);
+    if(userIndex === -1) {
+        return res.status(404).json({ success: false, message: 'User not found' });
+    }
+    users[userIndex] = { ...users[userIndex], ...req.body };
+    res.json({ success: true, data: users[userIndex] });
+});
+
+// DELETE - حذف مستخدم
+app.delete('/api/users/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    users = users.filter(u => u.id !== id);
+    res.json({ success: true, message: 'User deleted' });
+});
+
+app.listen(PORT, () => {
+    console.log(\`Server running on http://localhost:\${PORT}\`);
+});
+\`\`\`
+
+🔧 **كيفية الاستخدام:**
+1. تأكد من تثبيت Node.js
+2. npm install express
+3. node server.js
+4. اختبر API باستخدام Postman أو curl`;
+            }
             
-            responseHistory.push({ category, response, timestamp: Date.now() });
-            if (responseHistory.length > 50) responseHistory.shift();
+            // كود بايثون
+            if (q.includes('بايثون') || q.includes('python')) {
+                return `\`\`\`python
+# مثال: تطبيق ويب باستخدام Flask
+from flask import Flask, render_template, request, jsonify
+import sqlite3
+
+app = Flask(__name__)
+
+# إنشاء قاعدة بيانات
+def init_db():
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS tasks
+                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  title TEXT NOT NULL,
+                  completed BOOLEAN DEFAULT 0)''')
+    conn.commit()
+    conn.close()
+
+# الصفحة الرئيسية
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+# API لجلب المهام
+@app.route('/api/tasks', methods=['GET'])
+def get_tasks():
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    tasks = c.execute('SELECT * FROM tasks').fetchall()
+    conn.close()
+    return jsonify([{'id': t[0], 'title': t[1], 'completed': t[2]} for t in tasks])
+
+# API لإضافة مهمة
+@app.route('/api/tasks', methods=['POST'])
+def add_task():
+    data = request.json
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute('INSERT INTO tasks (title) VALUES (?)', (data['title'],))
+    conn.commit()
+    conn.close()
+    return jsonify({'success': True})
+
+if __name__ == '__main__':
+    init_db()
+    app.run(debug=True)
+\`\`\`
+
+🐍 **هذا الكود يبني:**
+- تطبيق Flask مع قاعدة بيانات SQLite
+- واجهة برمجة RESTful كاملة
+- إدارة المهام (To-Do List)`;
+            }
             
-            return response;
+            // كود React
+            if (q.includes('react') || q.includes('رياكت')) {
+                return `\`\`\`jsx
+// تطبيق React بسيط لإدارة المهام
+import React, { useState, useEffect } from 'react';
+import './App.css';
+
+function App() {
+  const [tasks, setTasks] = useState([]);
+  const [inputValue, setInputValue] = useState('');
+
+  // تحميل المهام من localStorage
+  useEffect(() => {
+    const savedTasks = localStorage.getItem('tasks');
+    if (savedTasks) {
+      setTasks(JSON.parse(savedTasks));
+    }
+  }, []);
+
+  // حفظ المهام
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }, [tasks]);
+
+  // إضافة مهمة جديدة
+  const addTask = () => {
+    if (inputValue.trim()) {
+      setTasks([...tasks, {
+        id: Date.now(),
+        text: inputValue,
+        completed: false
+      }]);
+      setInputValue('');
+    }
+  };
+
+  // تبديل حالة المهمة
+  const toggleTask = (id) => {
+    setTasks(tasks.map(task =>
+      task.id === id ? { ...task, completed: !task.completed } : task
+    ));
+  };
+
+  // حذف مهمة
+  const deleteTask = (id) => {
+    setTasks(tasks.filter(task => task.id !== id));
+  };
+
+  return (
+    <div className="App">
+      <h1>📝 قائمة المهام</h1>
+      <div className="input-container">
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyPress={(e) => e.key === 'Enter' && addTask()}
+          placeholder="أضف مهمة جديدة..."
+        />
+        <button onClick={addTask}>➕ إضافة</button>
+      </div>
+      <ul className="tasks-list">
+        {tasks.map(task => (
+          <li key={task.id} className={task.completed ? 'completed' : ''}>
+            <input
+              type="checkbox"
+              checked={task.completed}
+              onChange={() => toggleTask(task.id)}
+            />
+            <span>{task.text}</span>
+            <button onClick={() => deleteTask(task.id)}>🗑️</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default App;
+\`\`\`
+
+⚛️ **مميزات هذا التطبيق:**
+- حفظ المهام في المتصفح
+- إضافة وحذف وتحديث المهام
+- تصميم تفاعلي مع React Hooks`;
+            }
+            
+            return null;
         }
         
-        function categorizeQuestion(question) {
+        // إجابات عامة وشرح برمجي
+        async function getAIResponse(question) {
             const q = question.toLowerCase();
             
-            if (q.includes('السلام') || q.includes('مرحبا') || q.includes('اهلا') || q.includes('هلا'))
-                return 'greeting';
-            if (q.includes('من انت') || q.includes('من أنت') || q.includes('اسمك') || q.includes('ما اسم'))
-                return 'about';
-            if (q.includes('شكر') || q.includes('مشكور') || q.includes('تسلم'))
-                return 'thanks';
-            if (q.includes('صور') || q.includes('صورة') || q.includes('توليد'))
-                return 'image';
-            if (q.includes('طقس') || q.includes('المناخ') || q.includes('الجو'))
-                return 'weather';
-            if (q.includes('منشئ') || q.includes('مطور') || q.includes('برمج') || q.includes('عبدالرحمن'))
-                return 'creator';
-            
-            return 'default';
-        }
-        
-        async function getAIResponse(question) {
-            const category = categorizeQuestion(question);
-            let response = getRandomResponse(question, category);
-            
-            // إضافة لمسة شخصية في بعض الردود
-            if (category === 'default' && Math.random() > 0.5) {
-                response += '\n\nهل تريد معرفة المزيد عن هذا الموضوع؟';
+            // التحقق من طلب كود برمجي
+            const codeResponse = generateCode(question);
+            if (codeResponse) {
+                return codeResponse;
             }
             
-            return response;
+            // أسئلة برمجية متنوعة
+            if (q.includes('ما الفرق بين') || q.includes('الفرق')) {
+                return `📚 **الفرق بين المفاهيم البرمجية:**
+
+أحتاج إلى معرفة بالضبط ما الذي تريد المقارنة بينه؟ مثلاً:
+- **var vs let vs const** في JavaScript
+- **React vs Vue** في الأطر الأمامية
+- **SQL vs NoSQL** في قواعد البيانات
+
+أخبرني بالمفهومين وسأشرح لك الفروقات بالتفصيل مع أمثلة!`;
+            }
+            
+            if (q.includes('شرح') || q.includes('كيف يعمل') || q.includes('كيفية')) {
+                return `🔍 **شرح تفصيلي:**
+
+يمكنني شرح أي مفهوم برمجي تريده:
+- **JavaScript:** closures, promises, async/await
+- **Python:** decorators, generators, OOP
+- **HTML/CSS:** flexbox, grid, animations
+- **Frameworks:** React, Vue, Django, Flask
+
+قل لي بالضبط ما تريد شرحه وسأقدم لك شرحاً وافياً مع أمثلة!`;
+            }
+            
+            if (q.includes('خطأ') || q.includes('error') || q.includes('bug')) {
+                return `🐛 **تصحيح الأخطاء البرمجية:**
+
+لأتمكن من مساعدتك في إصلاح الخطأ، أرسل لي:
+1. الكود الذي يظهر فيه الخطأ
+2. رسالة الخطأ كاملة
+3. اللغة أو الإطار المستخدم
+
+سأقوم بتحليل المشكلة وإعطائك الحل الصحيح مع الشرح!`;
+            }
+            
+            // ردود الترحيب والتعريف
+            if (q.includes('مرحبا') || q.includes('السلام') || q.includes('اهلا')) {
+                const greetings = [
+                    'وعليكم السلام ورحمة الله! أنا AI Abdulrahman Bashir، مبرمج ذكي من بينور RGP. كيف يمكنني مساعدتك في كتابة الأكواد؟',
+                    'أهلاً بك! أنا هنا لمساعدتك في البرمجة. اطلب مني أي كود وسأكتبه لك بدقة واحترافية!',
+                    'السلام عليكم! تفضل بطرح سؤالك البرمجي، وسأقدم لك الحل الأمثل مع شرح وافٍ.'
+                ];
+                return greetings[Math.floor(Math.random() * greetings.length)];
+            }
+            
+            if (q.includes('من أنت') || q.includes('اسمك')) {
+                return `🤖 **أنا AI Abdulrahman Bashir**
+
+✨ **مطور ومبرمج ذكي من بينور RGP**
+💻 **متخصص في:**
+- كتابة أكواد برمجية صحيحة بجميع اللغات
+- شرح المفاهيم البرمجية المعقدة
+- تصميم مواقع ويب كاملة
+- حل مشاكل البرمجة وتصحيح الأخطاء
+- توليد صور واقعية بالذكاء الاصطناعي
+
+🚀 **اطلب مني أي كود وسأكتبه لك فوراً!**`;
+            }
+            
+            if (q.includes('شكر')) {
+                const thanks = [
+                    'العفو! سعيد بخدمتك 🤍 هل تريد مساعدة إضافية في البرمجة؟',
+                    'على الرحب والسعة! أنا هنا دائماً لأي استفسار برمجي',
+                    'لا شكر على واجب! تفضل بأي سؤال آخر في البرمجة'
+                ];
+                return thanks[Math.floor(Math.random() * thanks.length)];
+            }
+            
+            if (q.includes('صور') || q.includes('توليد')) {
+                return `🎨 **لتوليد الصور:**
+
+اذهب إلى تبويب "توليد صور" وأدخل وصفاً تفصيلياً للصورة التي تريدها.
+مثال: "شخص مبتسم في حديقة، ملامح وجه طبيعية، جودة عالية"
+
+يمكنني أيضاً مساعدتك في كتابة كود لتوليد الصور باستخدام APIs مثل DALL-E أو Stable Diffusion!`;
+            }
+            
+            // ردود برمجية عامة
+            const programmingResponses = [
+                `💻 **أنا مستعد لمساعدتك برمجياً!**
+
+اطلب مني:
+- كود موقع ويب كامل
+- حل مشكلة برمجية
+- شرح مفهوم معين
+- تحسين أداء كود
+
+ما الذي تريد كتابته بالضبط؟`,
+                `🔧 **مبرمج ذكي تحت خدمتك!**
+
+يمكنني كتابة أكواد بـ:
+- HTML/CSS/JavaScript
+- Python (Flask, Django)
+- React.js / Vue.js
+- SQL / MongoDB
+- وأي لغة تريدها!
+
+أخبرني بالمطلوب وسأكتبه لك فوراً.`,
+                `✨ **مرحباً بك في مساعد البرمجة الذكي!**
+
+لدي خبرة في:
+✅ إنشاء مواقع متجاوبة
+✅ تصميم واجهات مستخدم احترافية
+✅ كتابة APIs متكاملة
+✅ حل مشاكل الأداء
+
+ما المشروع الذي تعمل عليه؟`
+            ];
+            
+            return programmingResponses[Math.floor(Math.random() * programmingResponses.length)];
         }
         
         // توليد الصور
         async function generateImage(prompt) {
-            const enhancedPrompt = `${prompt}, realistic photo, high quality, detailed face, natural lighting, 4k, ultra realistic`;
-            const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(enhancedPrompt)}?width=1024&height=1024&nologo=true`;
-            return imageUrl;
+            const enhancedPrompt = `${prompt}, realistic photo, high quality, detailed face, natural lighting, 4k, ultra realistic, professional photography`;
+            return `https://image.pollinations.ai/prompt/${encodeURIComponent(enhancedPrompt)}?width=1024&height=1024&nologo=true`;
         }
         
         // ========== إعدادات الواجهة ==========
-        let currentLanguage = 'ar';
         let currentTheme = 'light';
         
         function applyTheme() {
@@ -613,25 +844,17 @@
             localStorage.setItem('app_theme', currentTheme);
         }
         
-        function applyLanguage() {
-            localStorage.setItem('app_language', currentLanguage);
-        }
-        
         function loadSettings() {
             const savedTheme = localStorage.getItem('app_theme');
-            const savedLang = localStorage.getItem('app_language');
             if (savedTheme) currentTheme = savedTheme;
-            if (savedLang) currentLanguage = savedLang;
             applyTheme();
-            applyLanguage();
-            document.getElementById('languageSelect').value = currentLanguage;
-            document.getElementById('themeSelect').value = currentTheme;
+            if (document.getElementById('themeSelect')) {
+                document.getElementById('themeSelect').value = currentTheme;
+            }
         }
         
         // ========== بدء التطبيق ==========
         document.addEventListener('DOMContentLoaded', () => {
-            initUsers();
-            checkLoggedIn();
             loadSettings();
             
             // التبويبات
@@ -653,96 +876,50 @@
                 });
             });
             
-            // نظام تسجيل الدخول
-            const authBtn = document.getElementById('authBtn');
-            const authModal = document.getElementById('authModal');
-            const closeModalBtn = document.getElementById('closeModalBtn');
-            const submitAuthBtn = document.getElementById('submitAuthBtn');
-            const switchAuthBtn = document.getElementById('switchAuthBtn');
-            let isLogin = true;
-            
-            authBtn.addEventListener('click', () => {
-                if (currentUser) {
-                    logout();
-                } else {
-                    authModal.style.display = 'flex';
-                }
-            });
-            
-            closeModalBtn.addEventListener('click', () => {
-                authModal.style.display = 'none';
-            });
-            
-            switchAuthBtn.addEventListener('click', () => {
-                isLogin = !isLogin;
-                document.getElementById('modalTitle').innerHTML = isLogin ? '🔐 تسجيل الدخول' : '📝 إنشاء حساب جديد';
-                submitAuthBtn.innerHTML = isLogin ? 'تسجيل الدخول' : 'إنشاء حساب';
-            });
-            
-            submitAuthBtn.addEventListener('click', () => {
-                const email = document.getElementById('authEmail').value.trim();
-                const password = document.getElementById('authPassword').value;
-                
-                if (!email || !password) {
-                    alert('❌ الرجاء إدخال البريد الإلكتروني وكلمة المرور');
-                    return;
-                }
-                
-                if (!email.includes('@') || !email.includes('.')) {
-                    alert('❌ الرجاء إدخال بريد إلكتروني صحيح');
-                    return;
-                }
-                
-                let result;
-                if (isLogin) {
-                    result = login(email, password);
-                } else {
-                    if (password.length < 4) {
-                        alert('❌ كلمة المرور يجب أن تكون 4 أحرف على الأقل');
-                        return;
-                    }
-                    result = register(email, password);
-                }
-                
-                if (result.success) {
-                    alert(`✅ ${result.message}`);
-                    authModal.style.display = 'none';
-                    document.getElementById('authEmail').value = '';
-                    document.getElementById('authPassword').value = '';
-                    updateUIForUser();
-                } else {
-                    alert(`❌ ${result.message}`);
-                }
-            });
-            
             // إعدادات
             const settingsBtn = document.getElementById('settingsBtn');
             const settingsModal = document.getElementById('settingsModal');
             const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+            const closeSettingsBtn = document.getElementById('closeSettingsBtn');
             
             settingsBtn.addEventListener('click', () => {
                 settingsModal.style.display = 'flex';
             });
             
-            saveSettingsBtn.addEventListener('click', () => {
-                currentLanguage = document.getElementById('languageSelect').value;
-                currentTheme = document.getElementById('themeSelect').value;
-                applyLanguage();
-                applyTheme();
+            function closeSettings() {
                 settingsModal.style.display = 'none';
-                alert('تم حفظ الإعدادات بنجاح!');
+            }
+            
+            saveSettingsBtn.addEventListener('click', () => {
+                currentTheme = document.getElementById('themeSelect').value;
+                applyTheme();
+                closeSettings();
             });
             
-            // إغلاق المودالات
+            closeSettingsBtn.addEventListener('click', closeSettings);
+            
             window.addEventListener('click', (e) => {
-                if (e.target === authModal) authModal.style.display = 'none';
-                if (e.target === settingsModal) settingsModal.style.display = 'none';
+                if (e.target === settingsModal) closeSettings();
+            });
+            
+            // مسح المحادثة
+            const clearChatBtn = document.getElementById('clearChatBtn');
+            const chatMessages = document.getElementById('chatMessages');
+            
+            clearChatBtn.addEventListener('click', () => {
+                chatMessages.innerHTML = `
+                    <div class="message bot">
+                        <div class="message-content">
+                            🧹 تم مسح المحادثة.<br>
+                            كيف يمكنني مساعدتك الآن؟ اطلب مني أي كود برمجي!
+                        </div>
+                    </div>
+                `;
             });
             
             // المحادثة
             const sendBtn = document.getElementById('sendChatBtn');
             const chatInput = document.getElementById('chatInput');
-            const chatMessages = document.getElementById('chatMessages');
             
             async function sendMessage() {
                 const msg = chatInput.value.trim();
@@ -750,14 +927,14 @@
                 
                 const userMsgDiv = document.createElement('div');
                 userMsgDiv.className = 'message user';
-                userMsgDiv.innerHTML = `<div class="message-content">${msg}</div>`;
+                userMsgDiv.innerHTML = `<div class="message-content">${msg.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>`;
                 chatMessages.appendChild(userMsgDiv);
                 chatInput.value = '';
                 chatMessages.scrollTop = chatMessages.scrollHeight;
                 
                 const typingDiv = document.createElement('div');
                 typingDiv.className = 'message bot';
-                typingDiv.innerHTML = `<div class="message-content"><i class="fas fa-spinner fa-spin"></i> جاري التفكير...</div>`;
+                typingDiv.innerHTML = `<div class="message-content"><i class="fas fa-spinner fa-spin"></i> جاري الكتابة...</div>`;
                 chatMessages.appendChild(typingDiv);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
                 
@@ -766,7 +943,13 @@
                 
                 const botMsgDiv = document.createElement('div');
                 botMsgDiv.className = 'message bot';
-                botMsgDiv.innerHTML = `<div class="message-content">${response}</div>`;
+                // تحويل النص إلى HTML مع دعم Markdown للكود
+                let formattedResponse = response
+                    .replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+                        return `<pre><code class="${lang || 'javascript'}">${code.trim()}</code></pre>`;
+                    })
+                    .replace(/\n/g, '<br>');
+                botMsgDiv.innerHTML = `<div class="message-content">${formattedResponse}</div>`;
                 chatMessages.appendChild(botMsgDiv);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
@@ -788,11 +971,6 @@
                     return;
                 }
                 
-                if (!currentUser) {
-                    alert('⚠️ الرجاء تسجيل الدخول أولاً لتوليد الصور');
-                    return;
-                }
-                
                 imagePreview.innerHTML = `
                     <div style="text-align: center;">
                         <div class="loading-spinner"></div>
@@ -806,4 +984,4 @@
         });
     </script>
 </body>
-</html>
+                                                   </html>
