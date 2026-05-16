@@ -1,188 +1,706 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الموقع الشخصي الاحترافي</title>
-    <!-- استدعاء خط Cairo من جوجل -->
-    <link href="https://fonts.googleapis.com" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #2563eb;
-            --secondary-color: #1e293b;
-            --bg-light: #f8fafc;
-            --text-main: #334155;
-        }
+================================================================================
+FILE: lib/db/src/schema/users.ts
+================================================================================
+import { pgTable, text, serial, timestamp, integer, boolean } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
+import { z } from "zod/v4";
 
-        * {
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-        }
+export const usersTable = pgTable("users", {
+  id: serial("id").primaryKey(),
+  clerkId: text("clerk_id").notNull().unique(),
+  email: text("email").notNull(),
+  displayName: text("display_name"),
+  avatarUrl: text("avatar_url"),
+  points: integer("points").notNull().default(0),
+  streak: integer("streak").notNull().default(0),
+  lastClaimedAt: timestamp("last_claimed_at", { withTimezone: true }),
+  totalToolsUsed: integer("total_tools_used").notNull().default(0),
+  isAdmin: boolean("is_admin").notNull().default(false),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
+});
 
-        body {
-            font-family: 'Cairo', sans-serif;
-            margin: 0;
-            background-color: var(--bg-light);
-            color: var(--text-main);
-            line-height: 1.6;
-        }
+export const insertUserSchema = createInsertSchema(usersTable).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertUser = z.infer<typeof insertUserSchema>;
+export type User = typeof usersTable.$inferSelect;
 
-        /* الهيدر الاحترافي */
-        header {
-            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
-            color: white;
-            padding: 100px 20px;
-            clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
-        }
+================================================================================
+FILE: lib/db/src/schema/tools.ts
+================================================================================
+import { pgTable, text, serial, timestamp, integer, boolean } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
+import { z } from "zod/v4";
 
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
+export const categoriesTable = pgTable("categories", {
+  id: serial("id").primaryKey(),
+  slug: text("slug").notNull().unique(),
+  nameAr: text("name_ar").notNull(),
+  nameEn: text("name_en").notNull(),
+  icon: text("icon").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
 
-        .hero p {
-            font-size: 1.2rem;
-            font-weight: 300;
-            letter-spacing: 1px;
-        }
+export const toolsTable = pgTable("tools", {
+  id: serial("id").primaryKey(),
+  slug: text("slug").notNull().unique(),
+  nameAr: text("name_ar").notNull(),
+  nameEn: text("name_en").notNull(),
+  descriptionAr: text("description_ar").notNull(),
+  category: text("category").notNull(),
+  icon: text("icon").notNull(),
+  usageCount: integer("usage_count").notNull().default(0),
+  isTrending: boolean("is_trending").notNull().default(false),
+  isPopular: boolean("is_popular").notNull().default(false),
+  isNew: boolean("is_new").notNull().default(true),
+  isAi: boolean("is_ai").notNull().default(false),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
+});
 
-        .container {
-            max-width: 1000px;
-            margin: -50px auto 50px;
-            padding: 0 20px;
-        }
+export const insertToolSchema = createInsertSchema(toolsTable).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertTool = z.infer<typeof insertToolSchema>;
+export type Tool = typeof toolsTable.$inferSelect;
+export const insertCategorySchema = createInsertSchema(categoriesTable).omit({ id: true, createdAt: true });
+export type InsertCategory = z.infer<typeof insertCategorySchema>;
+export type Category = typeof categoriesTable.$inferSelect;
 
-        /* كروت الأقسام */
-        .card {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
-        }
+================================================================================
+FILE: lib/db/src/schema/chat.ts
+================================================================================
+import { pgTable, text, serial, timestamp } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
+import { z } from "zod/v4";
 
-        h2 {
-            color: var(--secondary-color);
-            position: relative;
-            padding-bottom: 10px;
-            margin-top: 0;
-        }
+export const chatMessagesTable = pgTable("chat_messages", {
+  id: serial("id").primaryKey(),
+  sessionId: text("session_id").notNull(),
+  role: text("role").notNull(),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
 
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 50px;
-            height: 4px;
-            background: var(--primary-color);
-            border-radius: 2px;
-        }
+export const insertChatMessageSchema = createInsertSchema(chatMessagesTable).omit({ id: true, createdAt: true });
+export type InsertChatMessage = z.infer<typeof insertChatMessageSchema>;
+export type ChatMessage = typeof chatMessagesTable.$inferSelect;
 
-        /* المهارات */
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
+================================================================================
+FILE: artifacts/api-server/src/app.ts
+================================================================================
+import express, { type Express } from "express";
+import cors from "cors";
+import pinoHttp from "pino-http";
+import { clerkMiddleware } from "@clerk/express";
+import { publishableKeyFromHost } from "@clerk/shared/keys";
+import router from "./routes";
+import { logger } from "./lib/logger";
+import { CLERK_PROXY_PATH, clerkProxyMiddleware, getClerkProxyHost } from "./middlewares/clerkProxyMiddleware";
 
-        .skill-item {
-            background: #eff6ff;
-            color: var(--primary-color);
-            padding: 10px;
-            border-radius: 10px;
-            font-weight: bold;
-            text-align: center;
-            border: 1px solid #dbeafe;
-        }
+const app: Express = express();
+app.use(pinoHttp({ logger }));
+app.use(CLERK_PROXY_PATH, clerkProxyMiddleware());
+app.use(cors({ credentials: true, origin: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(clerkMiddleware((req) => ({ publishableKey: publishableKeyFromHost(getClerkProxyHost(req) ?? "", process.env.CLERK_PUBLISHABLE_KEY) })));
+app.use("/api", router);
+export default app;
 
-        /* أزرار التواصل */
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
+================================================================================
+FILE: artifacts/api-server/src/routes/tools.ts
+================================================================================
+import { Router } from "express";
+import { db, toolsTable, categoriesTable } from "@workspace/db";
+import { eq, ilike, or, desc } from "drizzle-orm";
 
-        .btn {
-            text-decoration: none;
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+const router = Router();
 
-        .btn-primary {
-            background: var(--primary-color);
-            color: white;
-        }
+router.get("/tools", async (req, res) => {
+  try {
+    const { category, search, trending, popular } = req.query as Record<string, string>;
+    let query = db.select().from(toolsTable).$dynamic();
+    const conditions = [];
+    if (category) conditions.push(eq(toolsTable.category, category));
+    if (search) conditions.push(or(ilike(toolsTable.nameAr, `%${search}%`), ilike(toolsTable.nameEn, `%${search}%`)));
+    if (trending === "true") conditions.push(eq(toolsTable.isTrending, true));
+    if (popular === "true") conditions.push(eq(toolsTable.isPopular, true));
+    if (conditions.length > 0) { const { and } = await import("drizzle-orm"); query = query.where(and(...conditions)); }
+    const tools = await query.orderBy(desc(toolsTable.usageCount));
+    res.json(tools);
+  } catch (err) { req.log.error({ err }, "Failed to list tools"); res.status(500).json({ error: "Internal server error" }); }
+});
 
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
-        }
+router.get("/tools/stats/summary", async (req, res) => {
+  try {
+    const [allTools, trendingTools, popularTools] = await Promise.all([
+      db.select().from(toolsTable),
+      db.select().from(toolsTable).where(eq(toolsTable.isTrending, true)).orderBy(desc(toolsTable.usageCount)).limit(6),
+      db.select().from(toolsTable).where(eq(toolsTable.isPopular, true)).orderBy(desc(toolsTable.usageCount)).limit(6),
+    ]);
+    const totalUses = allTools.reduce((sum, t) => sum + t.usageCount, 0);
+    res.json({ totalTools: allTools.length, totalUses, trendingTools, popularTools });
+  } catch (err) { req.log.error({ err }, "Failed to get tools summary"); res.status(500).json({ error: "Internal server error" }); }
+});
 
-        footer {
-            text-align: center;
-            padding: 40px;
-            color: #94a3b8;
-        }
+router.get("/tools/:slug", async (req, res) => {
+  try {
+    const [tool] = await db.select().from(toolsTable).where(eq(toolsTable.slug, req.params.slug));
+    if (!tool) { res.status(404).json({ error: "Tool not found" }); return; }
+    res.json(tool);
+  } catch (err) { req.log.error({ err }, "Failed to get tool"); res.status(500).json({ error: "Internal server error" }); }
+});
 
-        /* للموبايل */
-        @media (max-width: 600px) {
-            .hero h1 { font-size: 2rem; }
-            header { padding: 60px 20px; }
-        }
-    </style>
-</head>
-<body>
+router.post("/tools/:slug/use", async (req, res) => {
+  try {
+    const [tool] = await db.select().from(toolsTable).where(eq(toolsTable.slug, req.params.slug));
+    if (!tool) { res.status(404).json({ error: "Tool not found" }); return; }
+    const [updated] = await db.update(toolsTable).set({ usageCount: tool.usageCount + 1 }).where(eq(toolsTable.slug, req.params.slug)).returning();
+    res.json(updated);
+  } catch (err) { req.log.error({ err }, "Failed to record tool use"); res.status(500).json({ error: "Internal server error" }); }
+});
 
-    <header>
-        <div class="hero" style="text-align: center;">
-            <h1>[اسمك بالكامل]</h1>
-            <p>مطور واجهات أمامية & مصمم تجربة مستخدم</p>
+router.get("/categories", async (req, res) => {
+  try {
+    const cats = await db.select().from(categoriesTable);
+    const tools = await db.select().from(toolsTable);
+    res.json(cats.map(cat => ({ ...cat, toolCount: tools.filter(t => t.category === cat.slug).length })));
+  } catch (err) { req.log.error({ err }, "Failed to list categories"); res.status(500).json({ error: "Internal server error" }); }
+});
+
+export default router;
+
+================================================================================
+FILE: artifacts/api-server/src/routes/users.ts
+================================================================================
+import { Router } from "express";
+import { getAuth } from "@clerk/express";
+import { db, usersTable } from "@workspace/db";
+import { eq } from "drizzle-orm";
+
+const router = Router();
+
+function requireAuth(req: any, res: any, next: any) {
+  const auth = getAuth(req);
+  const userId = auth?.sessionClaims?.userId || auth?.userId;
+  if (!userId) return res.status(401).json({ error: "Unauthorized" });
+  req.clerkId = userId;
+  next();
+}
+
+router.post("/users/sync", async (req, res) => {
+  try {
+    const { clerkId, email, displayName, avatarUrl } = req.body;
+    if (!clerkId || !email) { res.status(400).json({ error: "clerkId and email required" }); return; }
+    const [existing] = await db.select().from(usersTable).where(eq(usersTable.clerkId, clerkId));
+    if (existing) { res.json(serializeUser(existing)); return; }
+    const [user] = await db.insert(usersTable).values({ clerkId, email, displayName, avatarUrl }).returning();
+    res.json(serializeUser(user));
+  } catch (err) { req.log.error({ err }, "Failed to sync user"); res.status(500).json({ error: "Internal server error" }); }
+});
+
+router.get("/users/profile", requireAuth, async (req: any, res) => {
+  try {
+    const [user] = await db.select().from(usersTable).where(eq(usersTable.clerkId, req.clerkId));
+    if (!user) { res.status(404).json({ error: "User not found" }); return; }
+    res.json(serializeUser(user));
+  } catch (err) { req.log.error({ err }, "Failed to get user profile"); res.status(500).json({ error: "Internal server error" }); }
+});
+
+router.patch("/users/profile", requireAuth, async (req: any, res) => {
+  try {
+    const { displayName } = req.body;
+    const [user] = await db.update(usersTable).set({ displayName }).where(eq(usersTable.clerkId, req.clerkId)).returning();
+    res.json(serializeUser(user));
+  } catch (err) { req.log.error({ err }, "Failed to update user profile"); res.status(500).json({ error: "Internal server error" }); }
+});
+
+function serializeUser(user: any) {
+  return { ...user, createdAt: user.createdAt?.toISOString?.() ?? user.createdAt };
+}
+
+export default router;
+
+================================================================================
+FILE: artifacts/api-server/src/routes/rewards.ts
+================================================================================
+import { Router } from "express";
+import { getAuth } from "@clerk/express";
+import { db, usersTable } from "@workspace/db";
+import { eq, desc } from "drizzle-orm";
+
+const router = Router();
+
+function requireAuth(req: any, res: any, next: any) {
+  const auth = getAuth(req);
+  const userId = auth?.sessionClaims?.userId || auth?.userId;
+  if (!userId) return res.status(401).json({ error: "Unauthorized" });
+  req.clerkId = userId;
+  next();
+}
+
+function isSameDay(d1: Date, d2: Date) {
+  return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
+}
+
+function isYesterday(d1: Date, d2: Date) {
+  const yesterday = new Date(d2);
+  yesterday.setDate(yesterday.getDate() - 1);
+  return isSameDay(d1, yesterday);
+}
+
+router.get("/rewards/status", requireAuth, async (req: any, res) => {
+  try {
+    const [user] = await db.select().from(usersTable).where(eq(usersTable.clerkId, req.clerkId));
+    if (!user) { res.status(404).json({ error: "User not found" }); return; }
+    const now = new Date();
+    const canClaimToday = !user.lastClaimedAt || !isSameDay(new Date(user.lastClaimedAt), now);
+    const streakBonus = Math.min(user.streak + 1, 7);
+    const nextRewardPoints = 10 + (streakBonus - 1) * 5;
+    res.json({ points: user.points, streak: user.streak, canClaimToday, lastClaimedAt: user.lastClaimedAt?.toISOString() ?? null, nextRewardPoints });
+  } catch (err) { req.log.error({ err }, "Failed to get reward status"); res.status(500).json({ error: "Internal server error" }); }
+});
+
+router.post("/rewards/claim", requireAuth, async (req: any, res) => {
+  try {
+    const [user] = await db.select().from(usersTable).where(eq(usersTable.clerkId, req.clerkId));
+    if (!user) { res.status(404).json({ error: "User not found" }); return; }
+    const now = new Date();
+    if (user.lastClaimedAt && isSameDay(new Date(user.lastClaimedAt), now)) { res.status(400).json({ error: "Already claimed today" }); return; }
+    const prevClaimed = user.lastClaimedAt ? new Date(user.lastClaimedAt) : null;
+    let newStreak = 1;
+    if (prevClaimed && isYesterday(prevClaimed, now)) newStreak = user.streak + 1;
+    const streakBonus = Math.min(newStreak, 7);
+    const pointsEarned = 10 + (streakBonus - 1) * 5;
+    const newTotal = user.points + pointsEarned;
+    await db.update(usersTable).set({ points: newTotal, streak: newStreak, lastClaimedAt: now }).where(eq(usersTable.clerkId, req.clerkId));
+    res.json({ pointsEarned, newTotal, streak: newStreak, message: "تم جمع المكافأة اليومية!" });
+  } catch (err) { req.log.error({ err }, "Failed to claim reward"); res.status(500).json({ error: "Internal server error" }); }
+});
+
+router.get("/rewards/leaderboard", async (req, res) => {
+  try {
+    const users = await db.select().from(usersTable).orderBy(desc(usersTable.points)).limit(10);
+    res.json(users.map((u, i) => ({ rank: i + 1, displayName: u.displayName ?? u.email.split("@")[0], avatarUrl: u.avatarUrl ?? null, points: u.points, streak: u.streak })));
+  } catch (err) { req.log.error({ err }, "Failed to get leaderboard"); res.status(500).json({ error: "Internal server error" }); }
+});
+
+export default router;
+
+================================================================================
+FILE: artifacts/api-server/src/routes/chat.ts
+================================================================================
+import { Router } from "express";
+import { db, chatMessagesTable } from "@workspace/db";
+import { eq } from "drizzle-orm";
+import { randomUUID } from "crypto";
+import OpenAI from "openai";
+
+const router = Router();
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY || "dummy",
+  baseURL: process.env.OPENAI_BASE_URL || "https://api.openai.com/v1",
+});
+
+router.post("/chat/message", async (req, res) => {
+  try {
+    const { message, sessionId: incomingSessionId } = req.body;
+    if (!message) { res.status(400).json({ error: "Message is required" }); return; }
+    const sessionId = incomingSessionId || randomUUID();
+    const history = await db.select().from(chatMessagesTable).where(eq(chatMessagesTable.sessionId, sessionId));
+    const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
+      { role: "system", content: "أنت مساعد ذكاء اصطناعي مفيد على منصة الأدوات العربية. تحدث بالعربية دائماً." },
+      ...history.map(m => ({ role: m.role as "user" | "assistant", content: m.content })),
+      { role: "user", content: message },
+    ];
+    let reply = "عذراً، حدث خطأ. يرجى المحاولة مرة أخرى.";
+    try {
+      const completion = await openai.chat.completions.create({ model: "gpt-4o-mini", messages, max_tokens: 500 });
+      reply = completion.choices[0]?.message?.content ?? reply;
+    } catch { reply = "مرحباً! أنا مساعدك الذكي. كيف يمكنني مساعدتك اليوم؟"; }
+    await db.insert(chatMessagesTable).values([
+      { sessionId, role: "user", content: message },
+      { sessionId, role: "assistant", content: reply },
+    ]);
+    res.json({ reply, sessionId });
+  } catch (err) { req.log.error({ err }, "Failed to send chat message"); res.status(500).json({ error: "Internal server error" }); }
+});
+
+router.get("/chat/history", async (req, res) => {
+  try {
+    const { sessionId } = req.query as { sessionId?: string };
+    if (!sessionId) { res.json([]); return; }
+    const messages = await db.select().from(chatMessagesTable).where(eq(chatMessagesTable.sessionId, sessionId));
+    res.json(messages.map(m => ({ ...m, createdAt: m.createdAt.toISOString() })));
+  } catch (err) { req.log.error({ err }, "Failed to get chat history"); res.status(500).json({ error: "Internal server error" }); }
+});
+
+export default router;
+
+================================================================================
+FILE: artifacts/api-server/src/routes/toolActions.ts
+================================================================================
+import { Router } from "express";
+import QRCode from "qrcode";
+
+const router = Router();
+
+router.post("/qr/generate", async (req, res) => {
+  try {
+    const { text, size = 300, color = "#000000", bgColor = "#ffffff" } = req.body;
+    if (!text) { res.status(400).json({ error: "Text is required" }); return; }
+    const dataUrl = await QRCode.toDataURL(text, { width: size, color: { dark: color, light: bgColor }, errorCorrectionLevel: "H" });
+    res.json({ dataUrl });
+  } catch (err) { req.log.error({ err }, "Failed to generate QR code"); res.status(500).json({ error: "Internal server error" }); }
+});
+
+const UNICODE_STYLES = [
+  { name: "Bold", map: (c: string) => { const code = c.charCodeAt(0); if (code >= 65 && code <= 90) return String.fromCodePoint(code - 65 + 0x1D400); if (code >= 97 && code <= 122) return String.fromCodePoint(code - 97 + 0x1D41A); return c; } },
+  { name: "Italic", map: (c: string) => { const code = c.charCodeAt(0); if (code >= 65 && code <= 90) return String.fromCodePoint(code - 65 + 0x1D434); if (code >= 97 && code <= 122) return String.fromCodePoint(code - 97 + 0x1D44E); return c; } },
+  { name: "Bubble", map: (c: string) => { const code = c.charCodeAt(0); if (code >= 65 && code <= 90) return String.fromCodePoint(code - 65 + 0x24B6); if (code >= 97 && code <= 122) return String.fromCodePoint(code - 97 + 0x24D0); return c; } },
+  { name: "Small Caps", map: (c: string) => { const map: Record<string,string> = {a:"ᴀ",b:"ʙ",c:"ᴄ",d:"ᴅ",e:"ᴇ",f:"ꜰ",g:"ɢ",h:"ʜ",i:"ɪ",j:"ᴊ",k:"ᴋ",l:"ʟ",m:"ᴍ",n:"ɴ",o:"ᴏ",p:"ᴘ",q:"Q",r:"ʀ",s:"s",t:"ᴛ",u:"ᴜ",v:"ᴠ",w:"ᴡ",x:"x",y:"ʏ",z:"ᴢ"}; return map[c.toLowerCase()] ?? c; } },
+  { name: "Upside Down", map: (c: string) => { const map: Record<string,string> = {a:"ɐ",b:"q",c:"ɔ",d:"p",e:"ǝ",f:"ɟ",g:"ƃ",h:"ɥ",i:"ᴉ",j:"ɾ",k:"ʞ",l:"l",m:"ɯ",n:"u",o:"o",p:"d",q:"b",r:"ɹ",s:"s",t:"ʇ",u:"n",v:"ʌ",w:"ʍ",x:"x",y:"ʎ",z:"z"}; return map[c.toLowerCase()] ?? c; } },
+];
+
+router.post("/text/styles", async (req, res) => {
+  try {
+    const { text } = req.body;
+    if (!text) { res.status(400).json({ error: "Text is required" }); return; }
+    const variants = UNICODE_STYLES.map(style => ({ name: style.name, text: text.split("").map(style.map).join("") }));
+    res.json({ variants });
+  } catch (err) { req.log.error({ err }, "Failed to generate styled text"); res.status(500).json({ error: "Internal server error" }); }
+});
+
+const ADJECTIVES = ["cool","super","mega","pro","star","epic","ninja","dark","light","swift","bold","wild","royal","neo","ultra"];
+const SUFFIXES = ["99","x","_pro","_og","2024","_live","123","_hd","7","_vip","_real"];
+
+router.post("/username/generate", async (req, res) => {
+  try {
+    const { keyword, style = "mixed" } = req.body;
+    if (!keyword) { res.status(400).json({ error: "Keyword is required" }); return; }
+    const base = keyword.toLowerCase().replace(/\s+/g, "_");
+    const usernames: string[] = [];
+    for (let i = 0; i < 12; i++) {
+      const adj = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)];
+      const suf = SUFFIXES[Math.floor(Math.random() * SUFFIXES.length)];
+      const variations = [`${adj}_${base}`,`${base}${suf}`,`${base}_${adj}`,`the_${base}`,`${base}_official`,`real${base}`,`${base}${Math.floor(Math.random()*999)}`,`${adj}${base.replace(/_/g,"")}`];
+      usernames.push(variations[i % variations.length]);
+    }
+    res.json({ usernames: [...new Set(usernames)].slice(0, 10) });
+  } catch (err) { req.log.error({ err }, "Failed to generate usernames"); res.status(500).json({ error: "Internal server error" }); }
+});
+
+export default router;
+
+================================================================================
+FILE: artifacts/api-server/src/routes/admin.ts
+================================================================================
+import { Router } from "express";
+import { getAuth } from "@clerk/express";
+import { db, usersTable, toolsTable } from "@workspace/db";
+import { eq, desc, count, gte } from "drizzle-orm";
+
+const router = Router();
+
+async function requireAdmin(req: any, res: any, next: any) {
+  const auth = getAuth(req);
+  const clerkId = auth?.sessionClaims?.userId || auth?.userId;
+  if (!clerkId) return res.status(401).json({ error: "Unauthorized" });
+  const [user] = await db.select().from(usersTable).where(eq(usersTable.clerkId, String(clerkId)));
+  if (!user?.isAdmin) return res.status(403).json({ error: "Forbidden" });
+  req.clerkId = clerkId;
+  next();
+}
+
+router.get("/admin/stats", requireAdmin, async (req, res) => {
+  try {
+    const [totalUsersResult] = await db.select({ count: count() }).from(usersTable);
+    const tools = await db.select().from(toolsTable).orderBy(desc(toolsTable.usageCount)).limit(5);
+    const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+    const [activeTodayResult] = await db.select({ count: count() }).from(usersTable).where(gte(usersTable.lastClaimedAt, yesterday));
+    const recentCutoff = new Date(); recentCutoff.setDate(recentCutoff.getDate() - 7);
+    const [recentSignupsResult] = await db.select({ count: count() }).from(usersTable).where(gte(usersTable.createdAt, recentCutoff));
+    const allTools = await db.select().from(toolsTable);
+    const totalToolUses = allTools.reduce((sum, t) => sum + t.usageCount, 0);
+    res.json({ totalUsers: totalUsersResult.count, totalToolUses, activeToday: activeTodayResult.count, topTools: tools, recentSignups: recentSignupsResult.count });
+  } catch (err) { req.log.error({ err }, "Failed to get admin stats"); res.status(500).json({ error: "Internal server error" }); }
+});
+
+router.get("/admin/users", requireAdmin, async (req, res) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 20;
+    const offset = (page - 1) * limit;
+    const [users, totalResult] = await Promise.all([
+      db.select().from(usersTable).orderBy(desc(usersTable.createdAt)).limit(limit).offset(offset),
+      db.select({ count: count() }).from(usersTable),
+    ]);
+    res.json({ users: users.map(u => ({ ...u, createdAt: u.createdAt.toISOString() })), total: totalResult[0].count, page, limit });
+  } catch (err) { req.log.error({ err }, "Failed to list admin users"); res.status(500).json({ error: "Internal server error" }); }
+});
+
+export default router;
+
+================================================================================
+FILE: artifacts/arabic-tools/src/App.tsx
+================================================================================
+import { useEffect, useRef } from "react";
+import { ClerkProvider, SignIn, SignUp, Show, useClerk, useUser } from '@clerk/react';
+import { publishableKeyFromHost } from '@clerk/react/internal';
+import { shadcn } from '@clerk/themes';
+import { Switch, Route, useLocation, Router as WouterRouter, Redirect } from 'wouter';
+import { queryClient } from "@/lib/queryClient";
+import { QueryClientProvider, useQueryClient } from "@tanstack/react-query";
+import { Toaster } from "@/components/ui/toaster";
+import { useSyncUser } from "@workspace/api-client-react";
+import Home from "@/pages/Home";
+import Tools from "@/pages/Tools";
+import Rewards from "@/pages/Rewards";
+import ToolDetail from "@/pages/ToolDetail";
+import Chat from "@/pages/Chat";
+import QrGenerator from "@/pages/QrGenerator";
+import TextStyles from "@/pages/TextStyles";
+import UsernameGenerator from "@/pages/UsernameGenerator";
+import Calculator from "@/pages/Calculator";
+import Profile from "@/pages/Profile";
+import Admin from "@/pages/Admin";
+import SignInPage from "@/pages/SignIn";
+import SignUpPage from "@/pages/SignUp";
+import NotFound from "@/pages/not-found";
+
+const clerkPubKey = publishableKeyFromHost(window.location.hostname, import.meta.env.VITE_CLERK_PUBLISHABLE_KEY);
+const clerkProxyUrl = import.meta.env.VITE_CLERK_PROXY_URL;
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+function stripBase(path: string): string {
+  return basePath && path.startsWith(basePath) ? path.slice(basePath.length) || "/" : path;
+}
+
+if (!clerkPubKey) throw new Error('Missing VITE_CLERK_PUBLISHABLE_KEY');
+
+const clerkAppearance = {
+  theme: shadcn,
+  cssLayerName: "clerk",
+  options: { logoPlacement: "inside" as const, logoLinkUrl: basePath || "/", logoImageUrl: `${window.location.origin}${basePath}/logo.svg` },
+  variables: { colorPrimary: "hsl(263 90% 65%)", colorForeground: "hsl(222 20% 90%)", colorBackground: "hsl(222 47% 7%)", colorInput: "hsl(222 47% 12%)", fontFamily: '"Cairo", sans-serif', borderRadius: "0.75rem" },
+  elements: { rootBox: "w-full flex justify-center", cardBox: "bg-card rounded-2xl w-[440px] max-w-full overflow-hidden border border-white/10 shadow-2xl", card: "!shadow-none !border-0 !bg-transparent !rounded-none" },
+};
+
+function ClerkQueryClientCacheInvalidator() {
+  const { addListener } = useClerk();
+  const queryClient = useQueryClient();
+  const prevUserIdRef = useRef<string | null | undefined>(undefined);
+  useEffect(() => {
+    const unsubscribe = addListener(({ user }) => {
+      const userId = user?.id ?? null;
+      if (prevUserIdRef.current !== undefined && prevUserIdRef.current !== userId) queryClient.clear();
+      prevUserIdRef.current = userId;
+    });
+    return unsubscribe;
+  }, [addListener, queryClient]);
+  return null;
+}
+
+function UserSync() {
+  const { isLoaded, isSignedIn, user } = useUser();
+  const syncMutation = useSyncUser();
+  const hasSynced = useRef(false);
+  useEffect(() => {
+    if (isLoaded && isSignedIn && user && !hasSynced.current) {
+      hasSynced.current = true;
+      syncMutation.mutate({ data: { clerkId: user.id, email: user.primaryEmailAddress?.emailAddress || "", displayName: user.firstName || user.username || undefined, avatarUrl: user.imageUrl } });
+    }
+  }, [isLoaded, isSignedIn, user]);
+  return null;
+}
+
+function ProtectedRoute({ component: Component }: { component: any }) {
+  return (
+    <>
+      <Show when="signed-in"><Component /></Show>
+      <Show when="signed-out"><Redirect to="/sign-in" /></Show>
+    </>
+  );
+}
+
+function ClerkProviderWithRoutes() {
+  const [, setLocation] = useLocation();
+  return (
+    <ClerkProvider publishableKey={clerkPubKey} proxyUrl={clerkProxyUrl} appearance={clerkAppearance}
+      signInUrl={`${basePath}/sign-in`} signUpUrl={`${basePath}/sign-up`}
+      localization={{ signIn: { start: { title: "مرحباً بعودتك", subtitle: "سجل الدخول للوصول إلى حسابك" } }, signUp: { start: { title: "إنشاء حساب", subtitle: "ابدأ رحلتك معنا اليوم" } } }}
+      routerPush={(to) => setLocation(stripBase(to))}
+      routerReplace={(to) => setLocation(stripBase(to), { replace: true })}>
+      <QueryClientProvider client={queryClient}>
+        <ClerkQueryClientCacheInvalidator />
+        <UserSync />
+        <Switch>
+          <Route path="/" component={Home} />
+          <Route path="/tools" component={Tools} />
+          <Route path="/tools/:slug" component={ToolDetail} />
+          <Route path="/chat" component={Chat} />
+          <Route path="/qr" component={QrGenerator} />
+          <Route path="/text-styles" component={TextStyles} />
+          <Route path="/username" component={UsernameGenerator} />
+          <Route path="/calculator" component={Calculator} />
+          <Route path="/rewards" component={Rewards} />
+          <Route path="/profile">{() => <ProtectedRoute component={Profile} />}</Route>
+          <Route path="/admin">{() => <ProtectedRoute component={Admin} />}</Route>
+          <Route path="/sign-in/*?" component={SignInPage} />
+          <Route path="/sign-up/*?" component={SignUpPage} />
+          <Route component={NotFound} />
+        </Switch>
+        <Toaster />
+      </QueryClientProvider>
+    </ClerkProvider>
+  );
+}
+
+function App() {
+  return <WouterRouter base={basePath}><ClerkProviderWithRoutes /></WouterRouter>;
+}
+
+export default App;
+
+================================================================================
+FILE: artifacts/arabic-tools/src/pages/Home.tsx
+================================================================================
+import { Layout } from "@/components/layout/Layout";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ToolCard } from "@/components/ui/ToolCard";
+import { Badge } from "@/components/ui/badge";
+import { useGetToolsSummary, useListCategories } from "@workspace/api-client-react";
+import { ArrowLeft, Search, Sparkles, Zap, Users, Activity, Award, TrendingUp } from "lucide-react";
+import { useState } from "react";
+import { Link, useLocation } from "wouter";
+
+export default function Home() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [, setLocation] = useLocation();
+  const { data: summary } = useGetToolsSummary();
+  const { data: categories, isLoading: isLoadingCategories } = useListCategories();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) setLocation(`/tools?search=${encodeURIComponent(searchQuery)}`);
+  };
+
+  return (
+    <Layout>
+      <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden">
+        <div className="container mx-auto px-4 relative z-10 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm font-medium text-primary mb-8">
+            <Sparkles className="w-4 h-4" /><span>المنصة الأولى للأدوات العربية</span>
+          </div>
+          <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tight leading-[1.2]">
+            أنجز مهامك بذكاء <br/>مع <span className="glowing-text">أدوات المستقبل</span>
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-10">منصة متكاملة تجمع كل ما تحتاجه من أدوات رقمية وتطبيقات الذكاء الاصطناعي في مكان واحد.</p>
+          <div className="max-w-xl mx-auto relative">
+            <form onSubmit={handleSearch} className="relative flex items-center">
+              <Search className="absolute right-4 w-5 h-5 text-muted-foreground" />
+              <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="ابحث عن أداة..." className="w-full h-14 pl-14 pr-12 rounded-full bg-background/80 backdrop-blur-xl border-white/20 text-lg" />
+              <Button type="submit" className="absolute left-2 h-10 rounded-full px-6 bg-primary hover:bg-primary/90 text-primary-foreground font-bold">بحث</Button>
+            </form>
+          </div>
         </div>
-    </header>
+      </section>
 
-    <div class="container">
-        <!-- قسم النبذة -->
-        <div class="card">
-            <h2>من أنا</h2>
-            <p>أنا متخصص في تحويل الأفكار إلى واقع رقمي ملموس. أركز على بناء مواقع سريعة، جذابة، وسهلة الاستخدام. لدي خبرة في التعامل مع أحدث التقنيات البرمجية لضمان جودة العمل.</p>
+      <section className="py-10 border-y border-white/5 bg-white/[0.02]">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x md:divide-x-reverse divide-white/10">
+            <div className="p-4 flex flex-col items-center"><div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary mb-4"><Zap className="w-6 h-6" /></div><h3 className="text-4xl font-black mb-2 glowing-text">{summary?.totalTools || "0"}+</h3><p className="text-muted-foreground font-medium">أداة احترافية</p></div>
+            <div className="p-4 flex flex-col items-center"><div className="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center text-accent mb-4"><Activity className="w-6 h-6" /></div><h3 className="text-4xl font-black mb-2 text-white">{summary?.totalUses.toLocaleString('ar-EG') || "0"}</h3><p className="text-muted-foreground font-medium">عملية ناجحة</p></div>
+            <div className="p-4 flex flex-col items-center"><div className="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-500 mb-4"><Users className="w-6 h-6" /></div><h3 className="text-4xl font-black mb-2 text-white">10K+</h3><p className="text-muted-foreground font-medium">مستخدم نشط</p></div>
+          </div>
         </div>
+      </section>
 
-        <!-- قسم المهارات -->
-        <div class="card">
-            <h2>المهارات التقنية</h2>
-            <div class="skills-grid">
-                <div class="skill-item">HTML5</div>
-                <div class="skill-item">CSS3</div>
-                <div class="skill-item">JavaScript</div>
-                <div class="skill-item">UI/UX</div>
-                <div class="skill-item">Git/GitHub</div>
-                <div class="skill-item">WordPress</div>
+      <div className="container mx-auto px-4 py-8">
+        <div className="w-full h-[90px] md:h-[250px] bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-muted-foreground adsense-banner">مساحة إعلانية</div>
+      </div>
+
+      {summary?.trendingTools && summary.trendingTools.length > 0 && (
+        <section className="py-16">
+          <div className="container mx-auto px-4">
+            <div className="flex items-end justify-between mb-10">
+              <div><h2 className="text-3xl font-bold mb-2 flex items-center gap-2"><TrendingUp className="text-primary" />الأدوات الرائجة</h2><p className="text-muted-foreground">الأدوات الأكثر استخداماً حالياً</p></div>
+              <Button variant="ghost" className="hidden sm:flex text-primary hover:text-primary hover:bg-primary/10" asChild><Link href="/tools?trending=true">عرض الكل <ArrowLeft className="w-4 h-4 mr-2" /></Link></Button>
             </div>
-        </div>
-
-        <!-- قسم التواصل -->
-        <div class="card" style="text-align: center;">
-            <h2>لنعمل معاً</h2>
-            <p>هل لديك مشروع ترغب في تنفيذه؟ يسعدني دائماً التواصل لبدء شيء رائع.</p>
-            <div class="social-links">
-                <a href="#" class="btn btn-primary">لينكد إن</a>
-                <a href="#" class="btn btn-primary" style="background: #333;">جيت هاب</a>
-                <a href="mailto:your@email.com" class="btn btn-primary" style="background: #e11d48;">البريد الإلكتروني</a>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {summary.trendingTools.map(tool => <ToolCard key={tool.id} tool={tool} />)}
             </div>
+          </div>
+        </section>
+      )}
+
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12"><h2 className="text-3xl font-bold mb-4">تصفح حسب التصنيف</h2></div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {isLoadingCategories ? Array(6).fill(0).map((_, i) => <div key={i} className="h-32 rounded-xl bg-white/5 animate-pulse"></div>) :
+              categories?.map((cat) => (
+                <Link key={cat.id} href={`/tools?category=${cat.slug}`} className="glass-card rounded-xl p-6 text-center hover:-translate-y-1 transition-transform group">
+                  <div className="w-12 h-12 mx-auto mb-3 bg-white/10 rounded-full flex items-center justify-center text-2xl group-hover:scale-110 transition-all">{cat.icon}</div>
+                  <h3 className="font-bold mb-1 group-hover:text-primary transition-colors">{cat.nameAr}</h3>
+                  <p className="text-xs text-muted-foreground">{cat.toolCount} أداة</p>
+                </Link>
+              ))}
+          </div>
         </div>
-    </div>
+      </section>
 
-    <footer>
-        تم التصميم بكل حب &copy; 2024
-    </footer>
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="glass-card rounded-3xl p-8 md:p-12 border-primary/20 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-[80px]"></div>
+            <div className="grid md:grid-cols-2 gap-10 items-center relative z-10">
+              <div>
+                <Badge className="bg-orange-500/20 text-orange-400 border-none mb-4 px-3 py-1"><Award className="w-4 h-4 ml-1" />برنامج المكافآت</Badge>
+                <h2 className="text-4xl font-bold mb-4">اكسب النقاط يومياً!</h2>
+                <p className="text-lg text-muted-foreground mb-8">سجل دخولك يومياً، استخدم الأدوات، واجمع النقاط.</p>
+                <Button size="lg" className="bg-gradient-to-r from-orange-500 to-primary text-white font-bold px-8" asChild>
+                  <Link href="/rewards">اجمع مكافأتك الآن <ArrowLeft className="w-5 h-5 mr-2" /></Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </Layout>
+  );
+}
 
-</body>
-</html>
+================================================================================
+FILE: artifacts/arabic-tools/src/pages/SignIn.tsx
+================================================================================
+import { Layout } from "@/components/layout/Layout";
+import { SignIn } from "@clerk/react";
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+export default function SignInPage() {
+  return (
+    <Layout>
+      <div className="min-h-[calc(100vh-16rem)] flex items-center justify-center py-12 px-4 relative">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px] pointer-events-none z-[-1]" />
+        <SignIn routing="path" path={`${basePath}/sign-in`} signUpUrl={`${basePath}/sign-up`} />
+      </div>
+    </Layout>
+  );
+}
+
+================================================================================
+FILE: artifacts/arabic-tools/src/pages/SignUp.tsx
+================================================================================
+import { Layout } from "@/components/layout/Layout";
+import { SignUp } from "@clerk/react";
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+export default function SignUpPage() {
+  return (
+    <Layout>
+      <div className="min-h-[calc(100vh-16rem)] flex items-center justify-center py-12 px-4 relative">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px] pointer-events-none z-[-1]" />
+        <SignUp routing="path" path={`${basePath}/sign-up`} signInUrl={`${basePath}/sign-in`} />
+      </div>
+    </Layout>
+  );
+}
